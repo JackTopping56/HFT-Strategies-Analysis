@@ -3,7 +3,6 @@ import time
 from io import StringIO
 import pandas as pd
 
-# Your Alpha Vantage API key
 api_key = '123Q6N0D536N4R2Y'
 
 

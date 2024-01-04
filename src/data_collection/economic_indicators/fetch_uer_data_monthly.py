@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 from io import StringIO
 
-# Replace 'YOUR_API_KEY_HERE' with your actual Alpha Vantage API key
+
 api_key = '123Q6N0D536N4R2Y'
 
 
