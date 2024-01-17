@@ -1,18 +1,18 @@
 import os
 from google.cloud import bigquery
 
-
+# Set the path for your service account key file
 service_account_key_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
-
-directory_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/technical_indicators/raw_sma_data_1min'  # Replace with the path to your local CSV files
+# Configure the path to your local CSV files and BigQuery credentials
+directory_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/technical_indicators/raw_vwap_data_1min'  # Replace with the path to your local CSV files
 project_id = 'lucky-science-410310'  # Replace with your Google Cloud project ID
 dataset_id = 'snp500_technical_indicator_data'  # Replace with your dataset ID
-table_id = 'snp500_sma_data_raw'  # Replace with your table name
+table_id = 'snp500_vwap_data_raw'  # Replace with your table name
 schema = [
     bigquery.SchemaField("time", "TIMESTAMP", mode="REQUIRED"),
-    bigquery.SchemaField("SMA", "FLOAT64", mode="NULLABLE"),
+    bigquery.SchemaField("VWAP", "FLOAT64", mode="NULLABLE"),
 ]
 
 # Initialize BigQuery client
@@ -53,4 +53,4 @@ for file in os.listdir(directory_path):
         file_path = os.path.join(directory_path, file)
         load_file_to_bigquery(file_path)
 
-print("All SMA files have been processed.")
+print("All StochO files have been processed.")

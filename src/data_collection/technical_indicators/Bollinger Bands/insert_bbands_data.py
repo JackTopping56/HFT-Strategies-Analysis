@@ -1,11 +1,11 @@
 import os
 from google.cloud import bigquery
 
-# Set the path for your service account key file
+
 service_account_key_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
-# Your other configurations remain the same
+
 directory_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/technical_indicators/raw_bbands_data_1min'
 project_id = 'lucky-science-410310'
 dataset_id = 'snp500_technical_indicator_data'

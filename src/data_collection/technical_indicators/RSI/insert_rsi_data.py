@@ -1,11 +1,11 @@
 import os
 from google.cloud import bigquery
 
-# Set the path for your service account key file
+
 service_account_key_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
-# Configure the path to your local CSV files and BigQuery credentials
+
 directory_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/technical_indicators/raw_rsi_data_1min'  # Replace with the path to your local CSV files
 project_id = 'lucky-science-410310'  # Replace with your Google Cloud project ID
 dataset_id = 'snp500_technical_indicator_data'  # Replace with your dataset ID
