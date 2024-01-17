@@ -1,20 +1,17 @@
 import os
 from google.cloud import bigquery
 
-# Set the path for your service account key file
 service_account_key_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
-# Your other configurations remain the same
-directory_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/technical_indicators/raw_bbands_data_1min'
-project_id = 'lucky-science-410310'
-dataset_id = 'snp500_technical_indicator_data'
-table_id = 'snp500_ema_data_raw'
+# Configure the path to your local CSV files and BigQuery credentials
+directory_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/technical_indicators/raw_ema_data_1min'  # Replace with the path to your local CSV files
+project_id = 'lucky-science-410310'  # Replace with your Google Cloud project ID
+dataset_id = 'snp500_technical_indicator_data' # Replace with your dataset ID
+table_id = 'snp500_ema_data_raw'  # Replace with your table name
 schema = [
     bigquery.SchemaField("time", "TIMESTAMP", mode="REQUIRED"),
-    bigquery.SchemaField("Real Lower Band", "FLOAT64", mode="NULLABLE"),
-    bigquery.SchemaField("Real Middle Band", "FLOAT64", mode="NULLABLE"),
-    bigquery.SchemaField("Real Upper Band", "FLOAT64", mode="NULLABLE"),
+    bigquery.SchemaField("EMA", "FLOAT64", mode="NULLABLE"),
 ]
 
 # Initialize BigQuery client
@@ -54,3 +51,5 @@ for file in os.listdir(directory_path):
     if file.endswith('.csv'):
         file_path = os.path.join(directory_path, file)
         load_file_to_bigquery(file_path)
+
+print("All EMA files have been processed.")
