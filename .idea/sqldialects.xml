@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/data_processing/economic_indicators/clean_cpi_data.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/data_processing/economic_indicators/clean_ffr_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/data_processing/market_data/clean_price_data_1min.py" dialect="GenericSQL" />
   </component>
 </project>
