@@ -9,17 +9,18 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 # Construct a BigQuery client object.
 client = bigquery.Client()
 
-# Define the base date and time for the start of trading on January 3, 2023, at 9:30 AM ET
-base_date = datetime(2023, 1, 3, 9, 30, tzinfo=pytz.timezone('America/New_York'))
+
+midnight_date = datetime(2023, 1, 3, 0, 0, tzinfo=pytz.timezone('America/New_York'))
 # Get the equivalent UTC datetime
-base_date_utc = base_date.astimezone(pytz.utc)
-base_timestamp_millis = int(base_date_utc.timestamp() * 1000)
+midnight_date_utc = midnight_date.astimezone(pytz.utc)
+# Convert to Unix timestamp in milliseconds
+midnight_timestamp_millis = int(midnight_date_utc.timestamp() * 1000)
 
 # Define query for cleaning the message book data and creating a new table
 clean_query = f"""
 CREATE OR REPLACE TABLE `lucky-science-410310.snp500_orderbook_data.snp500_message_data_clean` AS
 SELECT 
-    TIMESTAMP_MILLIS(CAST({base_timestamp_millis} + (Time * 1000) AS INT64)) AS Time,
+     TIMESTAMP_MILLIS(CAST({midnight_timestamp_millis} + (Time * 1000) AS INT64)) AS Time,
   Type,
   `Order ID` AS OrderID,
   Size,
