@@ -59,12 +59,19 @@ def preprocess_text(text):
     return ' '.join(tokens)
 
 
-
 df['ProcessedArticleTitle'] = df['ArticleTitle'].apply(preprocess_text)
+duplicates = df.duplicated(subset=['Symbol', 'ProcessedArticleTitle', 'ArticleDate'], keep='first')
+
+# Display the duplicate rows to review them
+print("Duplicate Rows based on 'Symbol', 'ProcessedArticleTitle', and 'ArticleDate':")
+print(df[duplicates])
+
+# Remove duplicates and keep the first occurrence
+df_unique = df.drop_duplicates(subset=['Symbol', 'ProcessedArticleTitle', 'ArticleDate'], keep='first')
+
 
 # Show the first few rows to verify
 print(df.head())
-
 
 
 processed_table_id = 'lucky-science-410310.snp500_sentiment_data.snp500_sentiment_data_processed'
@@ -80,7 +87,7 @@ job_config = bigquery.LoadJobConfig(
 )
 
 job = client.load_table_from_dataframe(
-    df[['Symbol', 'ArticleTitle', 'ProcessedArticleTitle', 'ArticleDate']], processed_table_id, job_config=job_config
+    df_unique[['Symbol', 'ArticleTitle', 'ProcessedArticleTitle', 'ArticleDate']], processed_table_id, job_config=job_config
 )
 
 
