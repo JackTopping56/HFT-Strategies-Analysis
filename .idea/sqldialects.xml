@@ -10,5 +10,6 @@
     <file url="file://$PROJECT_DIR$/src/data_processing/sentiment_data/clean_sentiment_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/data_processing/sentiment_data/extract_sentiment_scores.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/train_randomforrest_market_data_.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/models/orderbook_models/train_randomforrest_orderbook_data.py" dialect="GenericSQL" />
   </component>
 </project>
