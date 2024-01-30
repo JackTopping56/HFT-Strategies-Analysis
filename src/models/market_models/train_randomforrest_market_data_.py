@@ -7,7 +7,8 @@ from sklearn.metrics import mean_squared_error
 import numpy as np
 import matplotlib.pyplot as plt
 
-credentials = service_account.Credentials.from_service_account_file('/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json')
+credentials = service_account.Credentials.from_service_account_file(
+    '/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json')
 client = bigquery.Client(credentials=credentials)
 table_id = 'lucky-science-410310.snp500_combined_data.combined_market_data_clean'
 
