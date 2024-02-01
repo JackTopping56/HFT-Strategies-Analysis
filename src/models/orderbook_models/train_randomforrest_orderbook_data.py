@@ -6,10 +6,11 @@ from google.oauth2 import service_account
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 import time
 
 start_time = time.time()
-
 
 credentials = service_account.Credentials.from_service_account_file(
     '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json')
@@ -23,8 +24,8 @@ df = client.query(query).to_dataframe()
 spread_levels = []
 imbalance_levels = []
 
-# Feature Engineering
-for level in range(1, 2):
+# Feature Engineering for a larger range of levels
+for level in range(1, 11):  # Adjust the range as needed
     ask_price = df[f'AskPrice{level}'].astype(float)
     bid_price = df[f'BidPrice{level}'].astype(float)
     ask_size = df[f'AskSize{level}'].astype(float)
@@ -54,9 +55,19 @@ y = df['MidPriceMovement']
 # Split the dataset
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
+# Standardizing the features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Applying PCA
+pca = PCA(n_components=0.95)  # keep 95% of variance
+X_train_pca = pca.fit_transform(X_train_scaled)
+X_test_pca = pca.transform(X_test_scaled)
+
 # Model Training
 model = RandomForestClassifier(n_estimators=100, class_weight='balanced', random_state=42, n_jobs=-1)
-model.fit(X_train, y_train)
+model.fit(X_train_pca, y_train)
 
 # Hyperparameter Tuning with GridSearchCV
 param_grid = {
@@ -66,25 +77,25 @@ param_grid = {
     'max_features': ['sqrt', 'log2', None],
 }
 grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=3, scoring='accuracy', n_jobs=-1)
-grid_search.fit(X_train, y_train)
+grid_search.fit(X_train_pca, y_train)
 print(f"Best parameters: {grid_search.best_params_}")
 best_model = grid_search.best_estimator_
 
 # Re-evaluate the best model found from GridSearchCV
-y_pred_best = best_model.predict(X_test)
+y_pred_best = best_model.predict(X_test_pca)
 print(f"Accuracy of best model: {accuracy_score(y_test, y_pred_best)}")
 print(classification_report(y_test, y_pred_best))
 
 # Cross-validation
-cv_scores = cross_val_score(best_model, X, y, cv=5, scoring='accuracy')
+cv_scores = cross_val_score(best_model, X_train_pca, y_train, cv=5, scoring='accuracy')  # Note: using X_train_pca here
 print(f"Cross-validation scores: {cv_scores}")
 print(f"Mean CV accuracy: {np.mean(cv_scores)}")
 print(f"Standard deviation of CV accuracy: {np.std(cv_scores)}")
 
-# Feature Importance
+# Feature Importance (note: this may not be directly interpretable after PCA)
 feature_importances = best_model.feature_importances_
 features_sorted = sorted(zip(features, feature_importances), key=lambda x: x[1], reverse=True)
-for feature, importance in features_sorted:
+for feature, importance in features_sorted[:10]:
     print(f"{feature}: {importance}")
 
 # Plotting the top 10 feature importances
