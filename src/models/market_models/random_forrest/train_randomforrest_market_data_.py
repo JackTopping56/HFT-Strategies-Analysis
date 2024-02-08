@@ -4,14 +4,15 @@ import matplotlib.pyplot as plt
 from google.cloud import bigquery
 from google.oauth2 import service_account
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split, cross_val_score, RandomizedSearchCV
+from sklearn.model_selection import train_test_split, RandomizedSearchCV, cross_val_score
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+import joblib
 
 # Set up Google Cloud credentials and client
 credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
+    '/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
 )
 client = bigquery.Client(credentials=credentials)
 
@@ -36,11 +37,13 @@ X_train, X_test, y_train, y_test = train_test_split(df[features], df[target_vari
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
+joblib.dump(scaler, 'scaler_randomforrest_market.joblib')
 
 # Applying PCA
 pca = PCA(n_components=0.85)  # Adjust n_components to keep the desired amount of variance
 X_train_pca = pca.fit_transform(X_train_scaled)
 X_test_pca = pca.transform(X_test_scaled)
+joblib.dump(pca, 'pca_randomforrest_market.joblib')
 
 # Initialize the Random Forest model
 model = RandomForestRegressor(n_estimators=50, random_state=42, n_jobs=-1)
@@ -53,13 +56,13 @@ param_distributions = {
 }
 random_search = RandomizedSearchCV(estimator=model, param_distributions=param_distributions, n_iter=10, cv=3, n_jobs=-1, verbose=2, scoring='neg_mean_squared_error', random_state=42)
 random_search.fit(X_train_pca, y_train)
+joblib.dump(random_search.best_estimator_, 'best_model_market_randomforrest.joblib')
 
-# Best model from RandomizedSearchCV
-best_model = random_search.best_estimator_
+# Output the best parameters and RMSE
 print(f"Best parameters: {random_search.best_params_}")
 
 # Make predictions with the best model
-y_pred_best = best_model.predict(X_test_pca)
+y_pred_best = random_search.best_estimator_.predict(X_test_pca)
 
 # Evaluate the best model
 mse_best = mean_squared_error(y_test, y_pred_best)
@@ -82,7 +85,7 @@ plt.ylabel('Frequency')
 plt.show()
 
 # Cross-Validation with the best model
-cv_scores_best = cross_val_score(best_model, X_train_pca, y_train, cv=5, scoring='neg_mean_squared_error')
+cv_scores_best = cross_val_score(random_search.best_estimator_, X_train_pca, y_train, cv=5, scoring='neg_mean_squared_error')
 rmse_scores_best = np.sqrt(-cv_scores_best)
 print(f"Cross-validation scores with best model (RMSE): {rmse_scores_best}")
 print(f"Mean: {rmse_scores_best.mean()}")

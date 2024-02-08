@@ -9,11 +9,13 @@ from sklearn.metrics import classification_report, accuracy_score, confusion_mat
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import time
+import joblib
+
 
 start_time = time.time()
 
 credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json')
+    '/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json')
 client = bigquery.Client(credentials=credentials)
 table_id = 'lucky-science-410310.snp500_orderbook_data.snp500_messageorder_combined_clean'
 
@@ -64,10 +66,12 @@ X_test_scaled = scaler.transform(X_test)
 pca = PCA(n_components=0.95)  # keep 95% of variance
 X_train_pca = pca.fit_transform(X_train_scaled)
 X_test_pca = pca.transform(X_test_scaled)
+joblib.dump(pca, 'orderbook_pca_randomforrest.joblib')
 
 # Model Training
 model = RandomForestClassifier(n_estimators=100, class_weight='balanced', random_state=42, n_jobs=-1)
 model.fit(X_train_pca, y_train)
+joblib.dump(model, 'random_forrest_orderbook_model.joblib')
 
 # Hyperparameter Tuning with GridSearchCV
 param_grid = {
@@ -80,6 +84,7 @@ grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=3, scoring
 grid_search.fit(X_train_pca, y_train)
 print(f"Best parameters: {grid_search.best_params_}")
 best_model = grid_search.best_estimator_
+joblib.dump(best_model, 'random_forrest_orderbook_bestmodel.joblib')
 
 # Re-evaluate the best model found from GridSearchCV
 y_pred_best = best_model.predict(X_test_pca)

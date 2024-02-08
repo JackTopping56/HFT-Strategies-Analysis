@@ -6,8 +6,10 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
 from sklearn.metrics import mean_squared_error
 import numpy as np
+import joblib
 
-credentials = service_account.Credentials.from_service_account_file('/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json')
+credentials = service_account.Credentials.from_service_account_file(
+    '/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json')
 client = bigquery.Client(credentials=credentials)
 
 
@@ -51,6 +53,9 @@ print(f"Best parameters: {grid_search.best_params_}")
 # Best model from grid search
 best_model = grid_search.best_estimator_
 
+joblib.dump(vectorizer, 'sentiment_vectorizer_randomforrest.joblib')
+joblib.dump(best_model, 'random_forest_sentiment_model.joblib')
+
 # Predict on the test set
 y_pred = best_model.predict(X_test)
 
@@ -74,3 +79,5 @@ top_features = [(vectorizer.get_feature_names_out()[i], feature_importances[i]) 
 print(f"Top {top_n} feature importances:")
 for feature in top_features:
     print(feature)
+
+joblib.dump(top_features, 'sentiment_top_features_randomforrest.joblib')
