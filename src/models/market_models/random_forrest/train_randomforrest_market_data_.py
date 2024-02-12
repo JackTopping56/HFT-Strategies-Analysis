@@ -12,12 +12,12 @@ import joblib
 
 # Set up Google Cloud credentials and client
 credentials = service_account.Credentials.from_service_account_file(
-    'path_to_your_service_account_key.json'  # Update this path
+    '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'  # Update this path
 )
 client = bigquery.Client(credentials=credentials)
 
 # Load the data from BigQuery
-table_id = 'your_project_id.dataset_id.table_id'  # Update this with your table ID
+table_id = 'lucky-science-410310.snp500_orderbook_data.snp500_marketdata_clean'  # Update this with your table ID
 query = f"SELECT * FROM `{table_id}` ORDER BY market_timestamp ASC LIMIT 100000"  # Update your query as needed
 df = client.query(query).to_dataframe()
 
