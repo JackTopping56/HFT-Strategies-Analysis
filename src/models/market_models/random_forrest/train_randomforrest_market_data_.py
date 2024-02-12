@@ -48,10 +48,11 @@ param_distributions = {
     'n_estimators': [100, 200, 300],
     'max_depth': [None, 10, 20],
     'min_samples_split': [2, 5, 10],
-    'max_features': ['auto', 'sqrt']
+    'max_features': ['sqrt', 'log2']  # Corrected to only include valid options
 }
 random_search = RandomizedSearchCV(model, param_distributions, n_iter=10, cv=5, scoring='neg_mean_squared_error', n_jobs=-1, verbose=2, random_state=42)
 random_search.fit(X_train_pca, y_train)
+
 
 # Save the best model
 joblib.dump(random_search.best_estimator_, 'model_market.joblib')
