@@ -19,7 +19,7 @@ df_test = client.query(test_query).to_dataframe()
 # Load the scaler, PCA, and model from joblib
 scaler = joblib.load('scaler_orderbook.joblib')
 pca = joblib.load('pca_orderbook.joblib')
-model = joblib.load('randomforest_orderbook_initial_bestmodel.joblib')
+model = joblib.load('randomforest_orderbook_reduced_bestmodel.joblib')
 
 # Prepare the features for the testing dataset
 features = [f'MidPrice_Level{level}' for level in range(1, 6)] + \
@@ -60,3 +60,5 @@ predictions_df = pd.DataFrame({
 })
 predictions_df.to_csv('orderbook_predictions.csv', index=False)
 print("Predictions saved to 'orderbook_predictions.csv'")
+# Print the column names of your test DataFrame
+print(df_test.columns)

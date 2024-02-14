@@ -24,9 +24,8 @@ y_train = df_train['SentimentScore'].values
 joblib.dump(vectorizer, 'sentiment_vectorizer_randomforrest.joblib')
 
 # RandomForestRegressor initialization and training
-regressor = RandomForestRegressor(n_estimators=100, max_depth=None, random_state=42)
+regressor = RandomForestRegressor(n_estimators=100, max_depth=None, random_state=42, verbose=3, n_jobs=-1)
 regressor.fit(X_train, y_train)
 
 # Save the trained model
 joblib.dump(regressor, 'random_forest_sentiment_model.joblib')
-
