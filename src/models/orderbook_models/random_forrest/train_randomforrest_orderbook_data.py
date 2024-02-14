@@ -57,10 +57,9 @@ joblib.dump(pca, 'pca_orderbook.joblib')  # Save the PCA
 # Train the RandomForestClassifier with verbosity
 clf = RandomForestClassifier(random_state=42, class_weight='balanced', n_jobs=-1, verbose=1)  # Added verbose=1 for more output
 
-# Adjust GridSearchCV parameters for faster execution (example)
 param_grid = {
-    'n_estimators': [50, 100],  # Reduced number for quicker training
-    'max_depth': [5, 10],  # Reduced depth for quicker training
+    'n_estimators': [50, 100],
+    'max_depth': [5, 10],
     'min_samples_split': [2, 5],
     'max_features': ['sqrt', 'log2']
 }
@@ -78,14 +77,14 @@ feature_importances = best_model_initial.feature_importances_
 # Sort the feature importances in descending order and get their indices
 sorted_indices = np.argsort(feature_importances)[::-1]
 
-# You can decide how many features you want to keep. For example, keep top 50% most important features
+
 num_features_to_keep = len(sorted_indices) // 2  # Keep top 50% features
 top_feature_indices = sorted_indices[:num_features_to_keep]
 
 # Prepare data with reduced features
 X_train_reduced = X_train_scaled[:, top_feature_indices]
 
-# Optionally retrain with reduced features and perform grid search again
+
 grid_search_reduced = GridSearchCV(clf, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
 grid_search_reduced.fit(X_train_reduced, y_train)
 

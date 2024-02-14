@@ -17,14 +17,13 @@ test_query = f"SELECT * FROM `{test_table_id}`"
 df_test = client.query(test_query).to_dataframe()
 
 # Load the scaler, PCA, and model from joblib
-scaler = joblib.load('scaler_randomforrest_orderbook.joblib')
-pca = joblib.load('pca_randomforrest_orderbook.joblib')
-model = joblib.load('randomforest_orderbook_bestmodel.joblib')
+scaler = joblib.load('scaler_orderbook.joblib')
+pca = joblib.load('pca_orderbook.joblib')
+model = joblib.load('randomforest_orderbook_initial_bestmodel.joblib')
 
 # Prepare the features for the testing dataset
-# Assuming features are named similarly to the training set adjustments
-features = [f'MidPrice_Level{level}' for level in range(1, 51)] + \
-           [f'OrderImbalance_Level{level}' for level in range(1, 51)]
+features = [f'MidPrice_Level{level}' for level in range(1, 6)] + \
+           [f'OrderImbalance_Level{level}' for level in range(1, 6)]
 X_test = df_test[features]
 
 # Standardizing and PCA transformation of the test data
@@ -34,8 +33,7 @@ X_test_pca = pca.transform(X_test_scaled)
 # Making predictions on the test data
 y_pred = model.predict(X_test_pca)
 
-# Assuming 'PriceMovement' is your target variable in the test set
-y_test = df_test['PriceMovement']  # Update this if the actual target variable name is different
+y_test = df_test['PriceMovement']
 
 # Evaluating the model
 accuracy = accuracy_score(y_test, y_pred)
