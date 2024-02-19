@@ -6,12 +6,12 @@ from google.oauth2 import service_account
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import joblib
 
-# Google Cloud credentials and BigQuery client setup
+
 credentials = service_account.Credentials.from_service_account_file(
     '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json')  # Update this path as needed
 client = bigquery.Client(credentials=credentials)
 
-# Load the testing data from BigQuery
+
 test_table_id = 'lucky-science-410310.final_datasets.orderbook_test_data'
 test_query = f"SELECT * FROM `{test_table_id}`"
 df_test = client.query(test_query).to_dataframe()
@@ -60,5 +60,4 @@ predictions_df = pd.DataFrame({
 })
 predictions_df.to_csv('orderbook_predictions.csv', index=False)
 print("Predictions saved to 'orderbook_predictions.csv'")
-# Print the column names of your test DataFrame
 print(df_test.columns)

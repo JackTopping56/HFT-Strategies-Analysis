@@ -9,13 +9,12 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import joblib
 
-# Set up Google Cloud credentials and client
 credentials = service_account.Credentials.from_service_account_file(
     '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'  # Update with the path to your credentials file
 )
 client = bigquery.Client(credentials=credentials)
 
-# Load the training data from BigQuery
+
 train_table_id = 'lucky-science-410310.final_datasets.orderbook_training_data'
 train_query = f"SELECT * FROM `{train_table_id}`"
 df_train = client.query(train_query).to_dataframe()

@@ -8,18 +8,17 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 import joblib
 
-# Set up Google Cloud credentials and client
+
 credentials = service_account.Credentials.from_service_account_file(
     '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
 )
 client = bigquery.Client(credentials=credentials)
 
-# Load the training data from BigQuery
 table_id_train = 'lucky-science-410310.final_datasets.market_training_data'
 query_train = f"SELECT * FROM `{table_id_train}`"
 df_train = client.query(query_train).to_dataframe()
 
-# Select numeric features and possibly relevant non-numeric features
+# Select numeric and non-numeric features
 numeric_features = df_train.select_dtypes(include=[np.number]).columns.tolist()
 target_variable = 'close'  # Update this if needed
 features = [col for col in numeric_features if col != target_variable]

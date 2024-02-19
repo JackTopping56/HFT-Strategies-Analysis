@@ -6,13 +6,13 @@ from sklearn.metrics import mean_squared_error
 import joblib
 import matplotlib.pyplot as plt
 
-# Set up Google Cloud credentials and client
+
 credentials = service_account.Credentials.from_service_account_file(
     '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
 )
 client = bigquery.Client(credentials=credentials)
 
-# Load the testing data from BigQuery
+
 table_id_test = 'lucky-science-410310.final_datasets.market_test_data'  # Update this path
 query_test = f"SELECT * FROM `{table_id_test}`"
 df_test = client.query(query_test).to_dataframe()
@@ -58,7 +58,7 @@ plt.xlabel('Residuals')
 plt.ylabel('Frequency')
 plt.show()
 
-# Optionally save the predictions
+# Save predictions
 predictions_df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
 predictions_df.to_csv('market_randomforrest_predictions.csv', index=False)
 print("Predictions saved to market_randomforrest_predictions.csv.")
