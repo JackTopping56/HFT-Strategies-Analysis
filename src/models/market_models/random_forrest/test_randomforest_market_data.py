@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 
 credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
+    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json'
 )
 client = bigquery.Client(credentials=credentials)
 
