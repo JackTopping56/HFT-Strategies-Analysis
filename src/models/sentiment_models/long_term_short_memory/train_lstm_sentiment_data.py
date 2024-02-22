@@ -42,7 +42,6 @@ model.compile(optimizer='adam', loss='mean_squared_error')
 # Define early stopping
 early_stopping = EarlyStopping(monitor='loss', patience=3)
 
-# Fit the model
 model.fit(X_train, y_train, epochs=10, batch_size=32, callbacks=[early_stopping])
 
 # Save the model and tokenizer
