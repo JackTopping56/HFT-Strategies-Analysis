@@ -18,14 +18,14 @@ class ATR(bt.Indicator):
 
 class RandomForestStrategy(bt.Strategy):
     params = (
-        ('buy_threshold', 0.6),
-        ('sell_threshold', 0.4),
-        ('stop_loss_atr_multiplier', 3),  # Multiplier for ATR-based stop loss
-        ('risk_per_trade', 0.01),  # Risk 1% of the account per trade
+        ('buy_threshold', 0.55),  # Adjusted to be slightly more inclusive
+        ('sell_threshold', 0.45),  # Adjusted to allow for earlier exits
+        ('stop_loss_atr_multiplier', 3),
+        ('risk_per_trade', 0.01),
     )
 
     def __init__(self):
-        self.df_signals = pd.read_csv('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/market_randomforrest_predictions.csv')
+        self.df_signals = pd.read_csv('/path/to/market_randomforrest_predictions.csv')
         self.signal_index = 0
         self.order = None
         self.atr = ATR()
@@ -35,41 +35,44 @@ class RandomForestStrategy(bt.Strategy):
     def notify_order(self, order):
         if order.status in [order.Completed]:
             if order.isbuy():
-                self.log('BUY EXECUTED, Price: %.2f, Cost: %.2f, Comm %.2f' % (order.executed.price, order.executed.value, order.executed.comm))
+                self.log(f'BUY EXECUTED, Price: {order.executed.price:.2f}, Cost: {order.executed.value:.2f}, Comm {order.executed.comm:.2f}')
                 self.buyprice = order.executed.price
                 self.stop_loss = self.buyprice - (self.atr[0] * self.params.stop_loss_atr_multiplier)
             elif order.issell():
-                self.log('SELL EXECUTED, Price: %.2f, Cost: %.2f, Comm %.2f' % (order.executed.price, order.executed.value, order.executed.comm))
+                self.log(f'SELL EXECUTED, Price: {order.executed.price:.2f}, Cost: {order.executed.value:.2f}, Comm {order.executed.comm:.2f}')
+        elif order.status in [order.Canceled, order.Margin, order.Rejected]:
+            self.log('Order Canceled/Margin/Rejected')
         self.order = None
 
     def next(self):
         if self.signal_index >= len(self.df_signals):
-            return  # Prevent out of range error
+            return
 
         if self.order:
-            return  # Await order completion
+            return
 
         row = self.df_signals.iloc[self.signal_index]
         signal = row['Predicted']
         self.signal_index += 1
 
         current_price = self.data.close[0]
-        size = (self.broker.getvalue() * self.params.risk_per_trade) / (current_price - self.stop_loss) if self.stop_loss else 0
-
         if not self.position:
             if signal > self.params.buy_threshold:
+                size = self.broker.getvalue() * self.params.risk_per_trade / self.atr[0]
                 self.order = self.buy(size=size)
+                self.log(f'Attempting to BUY: Size {size:.2f}, Signal {signal:.2f}')
         else:
             if signal < self.params.sell_threshold or current_price < self.stop_loss:
                 self.order = self.sell(size=self.position.size)
+                self.log(f'Attempting to SELL: Size {self.position.size}, Signal {signal:.2f}, Current Price {current_price:.2f}, Stop Loss {self.stop_loss:.2f}')
 
     def stop(self):
-        self.log('Ending Value %.2f' % (self.broker.getvalue()))
+        self.log(f'Ending Value {self.broker.getvalue():.2f}')
 
     def log(self, txt, dt=None):
-        ''' Logging function for this strategy'''
         dt = dt or self.datas[0].datetime.date(0)
-        print('%s, %s' % (dt.isoformat(), txt))
+        print(f'{dt.isoformat()}, {txt}')
+
 
 
 
