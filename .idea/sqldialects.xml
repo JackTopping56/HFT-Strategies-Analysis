@@ -10,11 +10,11 @@
     <file url="file://$PROJECT_DIR$/src/data_processing/sentiment_data/clean_sentiment_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/data_processing/sentiment_data/extract_sentiment_scores.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/gradient_boosting_machines/train_gbm_market_data.py" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/models/market_models/random_forrest/train_randomforrest_market_data_.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/models/market_models/random_forest/train_randomforest_market_data_.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/support_vector_machines/train_svm_market_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/sentiment_models/bert/train_bert_sentiment_data.py" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/models/sentiment_models/long_term_short_memory/train_lstm_sentiment_data.py" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/models/sentiment_models/random_forrest/train_randomforrest_sentiment_data.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/models/sentiment_models/long_short_term_memory/train_lstm_sentiment_data.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/models/sentiment_models/random_forest/train_randomforest_sentiment_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/sentiment_models/xg_boost/test_xgboost_sentiment_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/sentiment_models/xg_boost/train_xgboost_sentiment_data.py" dialect="GenericSQL" />
   </component>
