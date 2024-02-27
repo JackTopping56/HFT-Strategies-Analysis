@@ -18,19 +18,22 @@ class ATR(bt.Indicator):
 
 class RandomForestStrategy(bt.Strategy):
     params = (
-        ('buy_threshold', 0.55),  # Adjusted to be slightly more inclusive
-        ('sell_threshold', 0.45),  # Adjusted to allow for earlier exits
+        ('buy_threshold', 0.55),
+        ('sell_threshold', 0.45),
         ('stop_loss_atr_multiplier', 3),
+        ('take_profit_atr_multiplier', 5),
         ('risk_per_trade', 0.01),
     )
 
     def __init__(self):
-        self.df_signals = pd.read_csv('/path/to/market_randomforrest_predictions.csv')
+        # Load signals from a CSV file
+        self.df_signals = pd.read_csv('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/market_randomforrest_predictions.csv')
         self.signal_index = 0
         self.order = None
         self.atr = ATR()
         self.buyprice = None
         self.stop_loss = None
+        self.take_profit = None  # New: take profit price
 
     def notify_order(self, order):
         if order.status in [order.Completed]:
@@ -38,6 +41,7 @@ class RandomForestStrategy(bt.Strategy):
                 self.log(f'BUY EXECUTED, Price: {order.executed.price:.2f}, Cost: {order.executed.value:.2f}, Comm {order.executed.comm:.2f}')
                 self.buyprice = order.executed.price
                 self.stop_loss = self.buyprice - (self.atr[0] * self.params.stop_loss_atr_multiplier)
+                self.take_profit = self.buyprice + (self.atr[0] * self.params.take_profit_atr_multiplier)  # New: set take profit
             elif order.issell():
                 self.log(f'SELL EXECUTED, Price: {order.executed.price:.2f}, Cost: {order.executed.value:.2f}, Comm {order.executed.comm:.2f}')
         elif order.status in [order.Canceled, order.Margin, order.Rejected]:
@@ -62,9 +66,12 @@ class RandomForestStrategy(bt.Strategy):
                 self.order = self.buy(size=size)
                 self.log(f'Attempting to BUY: Size {size:.2f}, Signal {signal:.2f}')
         else:
-            if signal < self.params.sell_threshold or current_price < self.stop_loss:
+            if current_price > self.take_profit or current_price < self.stop_loss:
                 self.order = self.sell(size=self.position.size)
-                self.log(f'Attempting to SELL: Size {self.position.size}, Signal {signal:.2f}, Current Price {current_price:.2f}, Stop Loss {self.stop_loss:.2f}')
+                self.log(f'Attempting to SELL: Size {self.position.size}, Current Price {current_price:.2f}, Stop Loss {self.stop_loss:.2f}, Take Profit {self.take_profit:.2f}')
+            elif signal < self.params.sell_threshold:
+
+                pass
 
     def stop(self):
         self.log(f'Ending Value {self.broker.getvalue():.2f}')
@@ -72,8 +79,6 @@ class RandomForestStrategy(bt.Strategy):
     def log(self, txt, dt=None):
         dt = dt or self.datas[0].datetime.date(0)
         print(f'{dt.isoformat()}, {txt}')
-
-
 
 
 credentials = service_account.Credentials.from_service_account_file(
