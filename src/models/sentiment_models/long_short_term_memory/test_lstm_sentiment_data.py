@@ -6,7 +6,7 @@ import joblib
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-from src.models.sentiment_models.long_term_short_memory.train_lstm_sentiment_data import max_length
+from src.models.sentiment_models.long_short_term_memory.train_lstm_sentiment_data import max_length
 
 # Set up Google Cloud credentials and client
 credentials = service_account.Credentials.from_service_account_file('/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json')
