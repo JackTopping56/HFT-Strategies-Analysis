@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from google.cloud import bigquery
 from google.oauth2 import service_account
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 import joblib
 import matplotlib.pyplot as plt
 
@@ -17,30 +17,35 @@ table_id_test = 'lucky-science-410310.final_datasets.market_test_data'  # Update
 query_test = f"SELECT * FROM `{table_id_test}`"
 df_test = client.query(query_test).to_dataframe()
 
-# Load the scaler and PCA from the joblib files
 scaler = joblib.load('scaler_market.joblib')
-pca = joblib.load('pca_market.joblib')
-
-# Load the trained model
 model = joblib.load('model_market.joblib')
 
-# Prepare the test data
-numeric_features = df_test.select_dtypes(include=[np.number]).columns.tolist()
-features = [col for col in numeric_features if col != 'close']  # Update if necessary
+
+# Identify numeric columns in the DataFrame
+numeric_cols = df_test.select_dtypes(include=[np.number]).columns.tolist()
+
+# Adjust the features list to include only numeric columns
+features = [col for col in numeric_cols if col != 'close']  # Assuming 'close' is your target variable
+
+
 X_test = df_test[features].astype(np.float32)
+
 y_test = df_test['close'].astype(np.float32)
 
-# Standardizing and PCA transformation of the test data
+# Standardizing the test data
 X_test_scaled = scaler.transform(X_test)
-X_test_pca = pca.transform(X_test_scaled)
 
 # Making predictions using the loaded model
-y_pred = model.predict(X_test_pca)
+y_pred = model.predict(X_test_scaled)
 
 # Evaluating the model on the test data
 mse = mean_squared_error(y_test, y_pred)
 rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
 print(f"RMSE on test data: {rmse}")
+print(f"MAE on test data: {mae}")
+print(f"R-squared on test data: {r2}")
 
 # Plotting residuals
 residuals = y_test - y_pred
