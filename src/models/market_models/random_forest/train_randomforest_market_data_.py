@@ -60,3 +60,7 @@ joblib.dump(random_search.best_estimator_, 'model_market.joblib')
 print(f"Best parameters: {random_search.best_params_}")
 print(f"Best score: {-random_search.best_score_} (MSE)")
 print("Model training complete and saved.")
+# Print the list of feature columns used for training
+print("Feature columns used for training:")
+print(features)
+
