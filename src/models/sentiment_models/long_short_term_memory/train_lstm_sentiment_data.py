@@ -11,9 +11,8 @@ import joblib
 import tensorflow as tf
 
 # Google Cloud credentials and BigQuery client setup
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json')
-client = bigquery.Client(credentials=credentials)
+
+client = bigquery.Client()
 
 # Load the training data from BigQuery
 train_table_id = 'lucky-science-410310.final_datasets.sentiment_training_data'
