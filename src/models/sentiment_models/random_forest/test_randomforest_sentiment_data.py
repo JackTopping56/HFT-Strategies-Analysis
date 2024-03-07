@@ -1,6 +1,5 @@
 import pandas as pd
 from google.cloud import bigquery
-from google.oauth2 import service_account
 from sklearn.metrics import mean_squared_error
 import joblib
 import numpy as np
@@ -9,10 +8,7 @@ import numpy as np
 vectorizer = joblib.load('sentiment_vectorizer_randomforrest.joblib')
 regressor = joblib.load('random_forest_sentiment_model.joblib')
 
-
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json')
-client = bigquery.Client(credentials=credentials)
+client = bigquery.Client()
 
 
 test_table_id = 'lucky-science-410310.final_datasets.sentiment_test_data'
