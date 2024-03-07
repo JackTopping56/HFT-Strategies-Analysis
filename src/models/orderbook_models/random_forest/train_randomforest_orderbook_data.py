@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from google.cloud import bigquery
-from google.oauth2 import service_account
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
@@ -9,10 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import joblib
 
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'  # Update with the path to your credentials file
-)
-client = bigquery.Client(credentials=credentials)
+client = bigquery.Client()
 
 
 train_table_id = 'lucky-science-410310.final_datasets.orderbook_training_data'
