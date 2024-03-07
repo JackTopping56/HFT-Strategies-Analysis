@@ -13,6 +13,7 @@
     <file url="file://$PROJECT_DIR$/src/data_processing/sentiment_data/clean_sentiment_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/data_processing/sentiment_data/extract_sentiment_scores.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/data_processing/technical_indicators/EMA/clean_ema_data.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/data_processing/technical_indicators/MACD/clean_macd_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/gradient_boosting_machines/train_gbm_market_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/random_forest/test_randomforest_market_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/random_forest/train_randomforest_market_data_.py" dialect="GenericSQL" />
