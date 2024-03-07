@@ -29,15 +29,31 @@ y_pred = model.predict(X_test_scaled)
 cash = 10000  # Starting cash
 position = 0  # No position initially
 portfolio_values = [cash]
+# Other adjustable parameters
+investment_fraction = 0.2  # Use 20% of current cash for each new investment
+stop_loss_percentage = 0.05  # Tighten stop loss to 5%
+take_profit_percentage = 0.10  # Increase take profit to 10%
+
+# Enhance buy condition: buy only if the prediction is significantly higher than the current price
+buy_threshold = 1.02  # Buy only if the prediction is at least 2% higher than the current price
 
 for i in range(len(y_pred) - 1):
-    if y_pred[i + 1] > y_test[i] and cash >= y_test[i]:  # Buy condition
-        position = cash // y_test[i]
-        cash -= position * y_test[i]
-    elif position > 0:  # Sell condition
-        cash += position * y_test[i + 1]
-        position = 0
-    portfolio_values.append(cash + position * y_test[i] if position > 0 else cash)
+    current_price = y_test[i]
+    predicted_next_price = y_pred[i + 1]
+    if position == 0 and predicted_next_price > current_price * buy_threshold:
+        # Calculate investment based on a fraction of available cash
+        investment = cash * investment_fraction
+        # Buy shares with available cash
+        shares_to_buy = investment // current_price
+        cash -= shares_to_buy * current_price
+        position += shares_to_buy
+        entry_price = current_price
+    elif position > 0:
+        # Check if stop loss or take profit conditions are met
+        if (current_price <= entry_price * (1 - stop_loss_percentage)) or (current_price >= entry_price * (1 + take_profit_percentage)):
+            cash += position * current_price
+            position = 0
+    portfolio_values.append(cash + (position * current_price if position > 0 else 0))
 
 # Calculate returns and metrics as before
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
@@ -62,7 +78,7 @@ print(f"Calmar Ratio: {calmar_ratio:.4f}")
 # Plot portfolio value over time
 plt.figure(figsize=(10, 6))
 plt.plot(portfolio_values, label='Portfolio Value')
-plt.title("SVM Portfolio Value Over Time")
+plt.title("Enhanced SVM Portfolio Value Over Time")
 plt.xlabel("Time")
 plt.ylabel("Value")
 plt.legend()
