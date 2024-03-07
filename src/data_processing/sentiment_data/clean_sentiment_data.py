@@ -1,11 +1,9 @@
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
-import pandas as pd
 import re
 from nltk.stem import SnowballStemmer
 from nltk.corpus import stopwords
 import nltk
-import os
 import ssl
 
 
@@ -21,9 +19,6 @@ else:
 # Download necessary NLTK data
 nltk.download('punkt')
 nltk.download('stopwords')
-
-service_account_key_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
 # Initialize a BigQuery client
 client = bigquery.Client()
