@@ -1,9 +1,5 @@
 from google.cloud import bigquery
-import os
 
-
-service_account_key_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
 # Construct a BigQuery client object.
 client = bigquery.Client()
