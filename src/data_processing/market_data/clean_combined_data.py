@@ -1,16 +1,9 @@
 from google.cloud import bigquery
-from google.oauth2 import service_account
 from sklearn.preprocessing import StandardScaler
-import pandas as pd
 
-# Path to your service account key
-service_account_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
-
-# Load the credentials
-credentials = service_account.Credentials.from_service_account_file(service_account_path)
 
 # Initialize a BigQuery client with the credentials
-client = bigquery.Client(credentials=credentials)
+client = bigquery.Client()
 
 # Replace this with the actual path to your BigQuery table
 source_table_id = 'lucky-science-410310.snp500_combined_data.combined_market_data'
