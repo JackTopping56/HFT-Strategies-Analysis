@@ -1,5 +1,4 @@
 from google.cloud import bigquery
-from google.oauth2 import service_account
 import pandas as pd
 import numpy as np
 from transformers import BertTokenizer, TFBertForSequenceClassification
@@ -7,10 +6,8 @@ from transformers import InputExample, InputFeatures
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
-# Google Cloud credentials and BigQuery client setup
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json')
-client = bigquery.Client(credentials=credentials)
+
+client = bigquery.Client()
 
 # Load the training data from BigQuery
 train_table_id = 'lucky-science-410310.final_datasets.sentiment_training_data'
