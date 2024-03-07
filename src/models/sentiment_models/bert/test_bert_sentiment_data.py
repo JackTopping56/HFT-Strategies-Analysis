@@ -1,14 +1,12 @@
 import pandas as pd
 import numpy as np
 from google.cloud import bigquery
-from google.oauth2 import service_account
 from transformers import BertTokenizer, TFBertForSequenceClassification
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 BERT_MODEL_PATH = '/Users/jacktopping/Documents/HFT-Analysis/src/models/sentiment_models/bert'
 
-credentials = service_account.Credentials.from_service_account_file('/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json')
-client = bigquery.Client(credentials=credentials)
+client = bigquery.Client()
 
 # Load the test data from BigQuery
 test_table_id = 'lucky-science-410310.final_datasets.sentiment_test_data'
