@@ -1,8 +1,6 @@
 from google.cloud import bigquery
-import pandas as pd
 from nltk.sentiment import SentimentIntensityAnalyzer
 import nltk
-import os
 import ssl
 
 try:
@@ -14,9 +12,6 @@ else:
 
 # Download the VADER lexicon
 nltk.download('vader_lexicon')
-
-service_account_key_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
 # Initialize a BigQuery client
 client = bigquery.Client()
