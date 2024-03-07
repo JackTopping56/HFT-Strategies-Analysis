@@ -5,7 +5,6 @@ import joblib
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 
-
 # Initialize the BigQuery client
 client = bigquery.Client()
 
@@ -41,15 +40,27 @@ y_pred = model.predict(X_test_scaled)
 cash = 10000  # Starting cash
 position = 0  # No position initially
 portfolio_values = [cash]
+investment_fraction = 0.1  # Investment fraction per trade
+stop_loss_percentage = 0.05  # Stop-loss threshold
+take_profit_percentage = 0.1  # Take-profit threshold
 
 for i in range(len(y_pred) - 1):
-    if y_pred[i + 1] > y_test[i] and cash >= y_test[i]:  # Buy condition based on prediction being higher than actual close
-        position = cash // y_test[i]
+    if position == 0 and y_pred[i + 1] > y_test[i]:  # Buy condition
+        # Calculate the number of shares to buy
+        investment = cash * investment_fraction
+        position = investment // y_test[i]
         cash -= position * y_test[i]
-    elif position > 0:  # Sell condition
-        cash += position * y_test[i + 1]
-        position = 0
-    portfolio_values.append(cash + position * y_test[i] if position > 0 else cash)
+        entry_price = y_test[i]
+    elif position > 0:
+        current_price = y_test[i + 1]
+        # Sell condition based on stop-loss or take-profit
+        if (current_price <= entry_price * (1 - stop_loss_percentage)) or \
+           (current_price >= entry_price * (1 + take_profit_percentage)):
+            cash += position * current_price
+            position = 0
+
+    # Update the portfolio value for the current day
+    portfolio_values.append(cash + (position * y_test[i] if position > 0 else 0))
 
 # Calculate returns and metrics
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
