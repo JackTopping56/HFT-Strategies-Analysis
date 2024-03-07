@@ -1,6 +1,5 @@
 import pandas as pd
 from google.cloud import bigquery
-from google.oauth2 import service_account
 from sklearn.feature_extraction.text import TfidfVectorizer
 from xgboost import XGBRegressor
 from sklearn.model_selection import GridSearchCV
@@ -8,10 +7,7 @@ from sklearn.metrics import mean_squared_error
 import joblib
 
 
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json'
-)
-client = bigquery.Client(credentials=credentials)
+client = bigquery.Client()
 
 train_table_id = 'lucky-science-410310.final_datasets.sentiment_training_data'
 query_train = f"SELECT * FROM `{train_table_id}`"
