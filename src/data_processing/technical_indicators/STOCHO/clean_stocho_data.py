@@ -1,9 +1,6 @@
-import os
 from google.cloud import bigquery
 import pandas as pd
 
-service_account_key_path = '/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
 client = bigquery.Client()
 
@@ -47,11 +44,11 @@ job_config = bigquery.LoadJobConfig(
         bigquery.SchemaField("SlowD_anomaly", "BOOLEAN"),
         bigquery.SchemaField("SlowK_anomaly", "BOOLEAN"),
     ],
-    write_disposition="WRITE_TRUNCATE",  # Overwrites the table if it already exists
+    write_disposition="WRITE_TRUNCATE",
 )
 
 # Upload the DataFrame to BigQuery
 job = client.load_table_from_dataframe(df, destination_table_id, job_config=job_config)
-job.result()  # Wait for the job to complete
+job.result()
 
 print("Stochastic Oscillator data cleaned and uploaded successfully. Number of rows after cleaning:", len(df))
