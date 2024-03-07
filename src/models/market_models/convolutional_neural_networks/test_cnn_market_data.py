@@ -1,16 +1,11 @@
 import pandas as pd
 import numpy as np
 from google.cloud import bigquery
-from google.oauth2 import service_account
 import joblib
 from tensorflow.keras.models import load_model
 
 
-# Set up Google Cloud credentials and client
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json'
-)
-client = bigquery.Client(credentials=credentials)
+client = bigquery.Client()
 
 # Load the test data from BigQuery
 table_id_test = 'lucky-science-410310.final_datasets.market_test_data'
