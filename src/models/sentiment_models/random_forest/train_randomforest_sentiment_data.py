@@ -1,14 +1,11 @@
 from google.cloud import bigquery
-from google.oauth2 import service_account
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestRegressor
 import joblib
 
-# Google Cloud credentials and BigQuery client setup
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json')
-client = bigquery.Client(credentials=credentials)
+
+client = bigquery.Client()
 
 # Load the training data from BigQuery
 train_table_id = 'lucky-science-410310.final_datasets.sentiment_training_data'
