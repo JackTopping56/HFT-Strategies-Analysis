@@ -1,17 +1,12 @@
 import pandas as pd
 import numpy as np
 from google.cloud import bigquery
-from google.oauth2 import service_account
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.preprocessing import StandardScaler
 import joblib
 
-# Set up Google Cloud credentials and client
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json'
-)
-client = bigquery.Client(credentials=credentials)
+client = bigquery.Client()
 
 # Load the training data from BigQuery
 table_id_train = 'lucky-science-410310.final_datasets.market_training_data'
@@ -63,4 +58,3 @@ print("Model training complete and saved.")
 # Print the list of feature columns used for training
 print("Feature columns used for training:")
 print(features)
-
