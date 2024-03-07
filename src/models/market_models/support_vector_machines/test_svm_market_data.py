@@ -1,17 +1,13 @@
 import pandas as pd
 import numpy as np
 from google.cloud import bigquery
-from google.oauth2 import service_account
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 import joblib
 import matplotlib.pyplot as plt
 
-# Initialize Google Cloud credentials and client
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json'
-)
-client = bigquery.Client(credentials=credentials)
+
+client = bigquery.Client()
 
 # Load the testing data from BigQuery
 table_id_test = 'lucky-science-410310.final_datasets.market_test_data'
