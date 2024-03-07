@@ -1,10 +1,7 @@
 from google.cloud import bigquery
-import os
 from datetime import datetime
 import pytz
 
-service_account_key_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
 # Construct a BigQuery client object.
 client = bigquery.Client()
@@ -37,7 +34,7 @@ WHERE
 """
 
 # Run the clean query
-query_job = client.query(clean_query)  # Make an API request.
+query_job = client.query(clean_query)
 
 # Wait for the job to complete.
 query_job.result()
