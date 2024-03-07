@@ -1,18 +1,13 @@
-import pandas as pd
 import numpy as np
 from google.cloud import bigquery
-from google.oauth2 import service_account
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D, MaxPooling1D, Flatten, Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping
 
-# Set up Google Cloud credentials and client
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json'
-)
-client = bigquery.Client(credentials=credentials)
+
+client = bigquery.Client()
 
 # Load the training data from BigQuery
 table_id_train = 'lucky-science-410310.final_datasets.market_training_data'
@@ -35,7 +30,7 @@ df_train_sampled[target_variable] = df_train_sampled[target_variable].astype(np.
 X_train_sampled = df_train_sampled[features].values
 y_train_sampled = df_train_sampled[target_variable].values
 
-# Reshape input to be [samples, time steps, features] which is required for CNN
+# Reshape input to be [samples, time steps, features]
 X_train_sampled = np.reshape(X_train_sampled, (X_train_sampled.shape[0], X_train_sampled.shape[1], 1))
 
 # Normalize features
