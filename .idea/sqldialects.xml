@@ -22,6 +22,7 @@
     <file url="file://$PROJECT_DIR$/src/models/market_models/gradient_boosting_machines/test_gbm_market_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/gradient_boosting_machines/train_gbm_market_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/long_short_term_memory/test_lstm_market_data.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/models/market_models/long_short_term_memory/train_lstm_market_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/random_forest/test_randomforest_market_data.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/random_forest/train_randomforest_market_data_.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/models/market_models/support_vector_machines/train_svm_market_data.py" dialect="GenericSQL" />

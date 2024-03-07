@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from google.cloud import bigquery
-from google.oauth2 import service_account
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 import tensorflow as tf
@@ -10,11 +9,7 @@ from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping
 
 
-# Set up Google Cloud credentials and client
-credentials = service_account.Credentials.from_service_account_file(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json'
-)
-client = bigquery.Client(credentials=credentials)
+client = bigquery.Client()
 
 # Load the training data from BigQuery
 table_id_train = 'lucky-science-410310.final_datasets.market_training_data'
