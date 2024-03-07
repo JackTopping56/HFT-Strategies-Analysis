@@ -22,7 +22,7 @@ df = df.drop_duplicates(subset=['time'])
 # 2. Handle missing values
 df = df.fillna(method='ffill')
 
-# 3. Correct data types (if needed)
+# 3. Correct data types
 df['time'] = pd.to_datetime(df['time'])
 df['SMA'] = pd.to_numeric(df['SMA'], errors='coerce')
 
@@ -38,7 +38,6 @@ job_config = bigquery.LoadJobConfig(
     schema=[
         bigquery.SchemaField("time", "TIMESTAMP"),
         bigquery.SchemaField("SMA", "FLOAT"),
-        # Include the anomaly flag column if you want to keep it for review
         bigquery.SchemaField("SMA_anomaly", "BOOLEAN"),
     ],
     write_disposition="WRITE_TRUNCATE",  # Overwrites the table if it already exists
@@ -46,6 +45,6 @@ job_config = bigquery.LoadJobConfig(
 
 # Upload the DataFrame to BigQuery
 job = client.load_table_from_dataframe(df, destination_table_id, job_config=job_config)
-job.result()  # Wait for the job to complete
+job.result()
 
 print("SMA data cleaned and uploaded successfully. Number of rows after cleaning:", len(df))
