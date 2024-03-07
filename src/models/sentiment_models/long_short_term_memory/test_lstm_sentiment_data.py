@@ -1,16 +1,15 @@
 import pandas as pd
 import numpy as np
 from google.cloud import bigquery
-from google.oauth2 import service_account
 import joblib
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 from src.models.sentiment_models.long_short_term_memory.train_lstm_sentiment_data import max_length
 
-# Set up Google Cloud credentials and client
-credentials = service_account.Credentials.from_service_account_file('/Users/jacktopping/Documents/HFT-Analysis/src/data_collection/lucky-science-410310-fe46afb2ea6c.json')
-client = bigquery.Client(credentials=credentials)
+
+
+client = bigquery.Client()
 
 # Load the test data
 test_table_id = 'lucky-science-410310.final_datasets.sentiment_training_data'
