@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.9 (HFT-Strategies-Analysis)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (tf_m1)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (sentiment_env)" project-jdk-type="Python SDK" />
 </project>
