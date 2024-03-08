@@ -12,8 +12,8 @@ query_test = "SELECT * FROM `lucky-science-410310.final_datasets.market_test_dat
 df_test = client.query(query_test).to_dataframe()
 
 
-scaler = joblib.load('/src/models/market_models/random_forest/scaler_market.joblib')
-model = joblib.load('/src/models/market_models/random_forest/model_market.joblib')
+scaler = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/scaler_market.joblib')
+model = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/model_market.joblib')
 
 # Feature selection and scaling
 features = [col for col in df_test.columns if col not in ['market_timestamp', 'close']]
