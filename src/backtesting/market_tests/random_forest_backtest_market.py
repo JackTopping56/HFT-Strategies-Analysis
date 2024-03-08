@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import joblib
 from google.cloud import bigquery
-from google.oauth2 import service_account
 import matplotlib.pyplot as plt
 
 
