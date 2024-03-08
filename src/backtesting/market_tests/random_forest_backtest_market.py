@@ -5,10 +5,8 @@ from google.cloud import bigquery
 from google.oauth2 import service_account
 import matplotlib.pyplot as plt
 
-# Initialize Google Cloud credentials and BigQuery client
-credentials = service_account.Credentials.from_service_account_file(
-    '/src/data_collection/lucky-science-410310-fe46afb2ea6c.json')
-client = bigquery.Client(credentials=credentials)
+
+client = bigquery.Client()
 
 # Load the test dataset from BigQuery
 query_test = "SELECT * FROM `lucky-science-410310.final_datasets.market_test_data`"
