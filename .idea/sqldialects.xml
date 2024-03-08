@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/backtesting/combined_backtests/lstm_backtest_combined.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/backtesting/combined_backtests/rf_backest_combined.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/backtesting/combined_backtests/xgboost_backtest_combined.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/backtesting/market_tests/cnn_backtest_market.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/backtesting/market_tests/gbm_backtest_market.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/backtesting/market_tests/lstm_backtest_market.py" dialect="GenericSQL" />
