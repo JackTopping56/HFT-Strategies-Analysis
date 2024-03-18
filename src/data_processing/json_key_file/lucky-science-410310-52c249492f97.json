@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "lucky-science-410310",
+  "private_key_id": "52c249492f974500848addff0d443afd2d63f134",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDDY3hD11InLxOA\n+CXSAfEkidSNuWjzywRq63oH7aon47FEqWyWD95jq2BWt2JTuMfTW3lAb3eOo5dW\nNeNSqtKGnjJKSTJwXv4FLcmF0Axubdj0nz3ZflY7f6hdeVP1H36XDHYQUFAzKp+8\ni6ccKaaYe3Lz5ZVJMNb6E8/dPEBS94H0ZdS9W8b+Y+oIoNij5ceQfcjTSChZvtOh\nC7CEoeS/TbJsj1XfoNfhG7TSVQrfqmv/tuO8KpABXCfDg/M/ZKlZeFNQOZ7ZX+v1\nL7Wk3AUWfbyZyD0Wve/4s2THYEidgfMGSq7gR1Ymp/39JJmb0pkPjnCCvWimUjVQ\nB62j3Sp1AgMBAAECggEAISZMLj5m6sz64yO2zvWTYx6bWFw/qTUlj7pZ3uR8vP3N\ngpe4G5GfqotV8gB1Bz1PcdWQMdV3lFS/BVppMgpXY42NfLsEerozIM/O5AwTP90V\nNRObW74qhTe4aft+uhTY1mm/0i6+HKA7r7KF7KpIYJB5RVYLSPqnTpBz8NYbF7go\niT2uoPnlCVCxTgLYt/3M5n/TMG4UkIHdAqE5+NtSeoy5Jt6cGConwURrXl9KddUJ\nlJbB9IWQIwBbU5Q8VTbLR6nAC7lRvSoidVqNyjycF3PDe5JhJJxBAoalskeMrzxF\nl6+Z2WifarA+unajdID5sl6ZWqdjBI4nyHDJ7Z8swQKBgQDgc7Lq7WkSOhk3qv5r\n5VsdBzc03wb7Cbb6r3jHaTPL5PI3h4l5Tb0ugzfUZH5EApMRgJ9XgXbL86g2moaU\ncamw4jawKOP/4mAQzII6/uxtlrpq+r8+bo1XJliv2BNEYS74C81bR8ObW8ZsPt9n\newiW3sezW4PViu166f6/qf4s5QKBgQDe2gCqze7Wfdh8Mqs53aJ5oIkxSrmo76TP\nj8l2eHBYfkf2frYV4YW6GGCyP5egdRT4+hOZI57eQ7R8r1fDYjT8DAjYPDtFcA+L\nO4ijUBJNzIbzysiDFtr7EZXNqfKsLNSJ11nbmKRP6Ne6hlxEc55IMpC7VBqdib3p\n+YjFfbO+UQKBgG+L0G1Ek6VFTmcGCe8hSwjAH0WdWWDFUTSApCumMuGv5FiIeV/Z\nrJ1DBSn+z2mJRgG6xHW+l4WAkCai4SNA4a5QnhEqITV4EXoHyOj87A8Ci57DAuxK\nEOAw5H5vihO/oJIRe3tTzPiWwaPmEyzgTkJ8cQ7H+lrT8nXVeI9UMkepAoGBANEC\nMcIAptKw8Qt7EjCReEMOl92NMhgJus+ZEeB1ERlORvwe13QqMhvZpUdIcVNivCrP\nkPX9/JCFe4+9fFiZkQwb1WfJBeYYNdvmGD7jaGdjPecE945LL1Juqctca2ekHCqz\nuWlF/kWcIkikn4Dr1zXrhubK+LNsbpw1F1vyi1QhAoGBAKKzopMOFiYQagqRHaG2\nRf+H7TvmehYpzjt/+Az+JmAnakN0dIDMAgHxI74o759fXublFi1HaFQy6/YfftrF\n5/wayEn9IGqNrr1qIeCQ+jCkrXip0axnDhImmhT1BNhT7BeKEuS2Tw/aWMLlFyUq\n0KHUHOJCruAQ0xDyny6d4erS\n-----END PRIVATE KEY-----\n",
+  "client_email": "jacktopping@lucky-science-410310.iam.gserviceaccount.com",
+  "client_id": "117021810825830081312",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/jacktopping%40lucky-science-410310.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
