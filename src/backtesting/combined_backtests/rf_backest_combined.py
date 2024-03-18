@@ -98,7 +98,7 @@ print(f"Average Predicted Sentiment Score: {df_sentiment['Predicted Sentiment'].
 plt.figure(figsize=(14, 7))
 plt.plot(portfolio_values, label='Portfolio Value', color='blue')
 plt.fill_between(range(len(portfolio_values)), min(portfolio_values), portfolio_values, color='lightblue', alpha=0.4)
-plt.title("Enhanced Portfolio Value Over Time with Sentiment Analysis", fontsize=16)
+plt.title("Random Forest Portfolio Value Over Time - With Sentiment Analysis", fontsize=16)
 plt.xlabel("Time", fontsize=14)
 plt.ylabel("Portfolio Value", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
