@@ -9,8 +9,6 @@ venv/
 
 # Ignore all .log files
 *.log
-
-# If you have .env files for environment variables, ignore them too
+.json_key_file
 .env
 
-# If you have specific files in your project directory, you can also ignore them by name
