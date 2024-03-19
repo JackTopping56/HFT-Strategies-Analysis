@@ -4,7 +4,8 @@ from google.cloud import bigquery
 import joblib
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
-
+from sklearn.metrics import mean_squared_error, accuracy_score, precision_recall_fscore_support
+from math import sqrt
 
 client = bigquery.Client()
 
@@ -15,6 +16,15 @@ df_market_test = client.query(query_test).to_dataframe()
 # Load the sentiment predictions and interpolate missing values
 df_sentiment = pd.read_csv('/Users/jacktopping/Documents/HFT-Analysis/src/models/sentiment_models/long_short_term_memory/lstm_sentiment_predictions.csv')
 df_sentiment['Predicted Sentiment'] = df_sentiment['Predicted Sentiment'].interpolate().fillna(method='bfill').fillna(method='ffill')
+
+# Assuming binary classification for sentiment analysis
+threshold = 0.5
+df_sentiment['Predicted Class'] = (df_sentiment['Predicted Sentiment'] > threshold).astype(int)
+df_sentiment['Actual Class'] = (df_sentiment['Actual Sentiment'] > threshold).astype(int)
+
+# Calculate metrics for sentiment model
+accuracy_sentiment = accuracy_score(df_sentiment['Actual Class'], df_sentiment['Predicted Class'])
+precision_sentiment, recall_sentiment, f1_score_sentiment, _ = precision_recall_fscore_support(df_sentiment['Actual Class'], df_sentiment['Predicted Class'], average='binary')
 
 # Load the LSTM market model and scaler
 scaler = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/long_short_term_memory/scaler_market_lstm.joblib')
@@ -56,24 +66,30 @@ for i in range(min_length - 1):
 
     portfolio_values.append(cash + position * y_test_market[i] if position > 0 else cash)
 
-
+# Calculate additional performance metrics
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
-sharpe_ratio = (portfolio_returns.mean() * 252 - (0.02 / 252)) / (portfolio_returns.std() * np.sqrt(252))
+sharpe_ratio = (portfolio_returns.mean() * 252) / (portfolio_returns.std() * np.sqrt(252))
 negative_returns = portfolio_returns[portfolio_returns < 0]
-sortino_ratio = (portfolio_returns.mean() * 252 - (0.02 / 252)) / (negative_returns.std() * np.sqrt(252))
+sortino_ratio = (portfolio_returns.mean() * 252) / (negative_returns.std() * np.sqrt(252))
 rolling_max = pd.Series(portfolio_values).cummax()
 daily_drawdown = pd.Series(portfolio_values) / rolling_max - 1
 max_drawdown = daily_drawdown.min()
 annual_return = portfolio_returns.mean() * 252
 calmar_ratio = annual_return / abs(max_drawdown)
 
-print(f"Sharpe Ratio: {sharpe_ratio}")
-print(f"Sortino Ratio: {sortino_ratio}")
-print(f"Maximum Drawdown: {max_drawdown}")
-print(f"Calmar Ratio: {calmar_ratio}")
-print(f"Average Predicted Sentiment Score: {df_sentiment['Predicted Sentiment'].mean()}")
+# Performance metrics text for plot annotation
+performance_text = (
+    f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
+    f"Sortino Ratio: {sortino_ratio:.2f}\n"
+    f"Max Drawdown: {max_drawdown*100:.2f}%\n"
+    f"Calmar Ratio: {calmar_ratio:.2f}\n"
+    f"Accuracy (Sentiment Model): {accuracy_sentiment:.2f}\n"
+    f"Precision (Sentiment Model): {precision_sentiment:.2f}\n"
+    f"Recall (Sentiment Model): {recall_sentiment:.2f}\n"
+    f"F1-Score (Sentiment Model): {f1_score_sentiment:.2f}"
+)
 
-# Plot Enhanced Portfolio Value Over Time with Sentiment Analysis
+# Plotting
 plt.figure(figsize=(14, 7))
 plt.plot(portfolio_values, label='Portfolio Value with Sentiment', color='blue')
 plt.fill_between(range(len(portfolio_values)), min(portfolio_values), portfolio_values, color='lightblue', alpha=0.4)
@@ -82,4 +98,5 @@ plt.xlabel("Time", fontsize=14)
 plt.ylabel("Portfolio Value", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
 plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+plt.figtext(0.5, 0.95, performance_text, ha="center", fontsize=10, bbox={"facecolor":"white", "alpha":0.5, "pad":5}, verticalalignment='top')
 plt.show()
