@@ -17,7 +17,7 @@ df_market_test = client.query(query_test).to_dataframe()
 df_sentiment = pd.read_csv('/Users/jacktopping/Documents/HFT-Analysis/src/models/sentiment_models/long_short_term_memory/lstm_sentiment_predictions.csv')
 df_sentiment['Predicted Sentiment'] = df_sentiment['Predicted Sentiment'].interpolate().fillna(method='bfill').fillna(method='ffill')
 
-# Assuming binary classification for sentiment analysis
+
 threshold = 0.5
 df_sentiment['Predicted Class'] = (df_sentiment['Predicted Sentiment'] > threshold).astype(int)
 df_sentiment['Actual Class'] = (df_sentiment['Actual Sentiment'] > threshold).astype(int)
