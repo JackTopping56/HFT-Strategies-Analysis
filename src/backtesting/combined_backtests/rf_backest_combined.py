@@ -3,6 +3,8 @@ import pandas as pd
 import joblib
 from google.cloud import bigquery
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error, accuracy_score, precision_recall_fscore_support
+from math import sqrt
 
 # Initialize BigQuery client
 client = bigquery.Client()
@@ -19,11 +21,20 @@ df_sentiment = pd.read_csv(
 df_sentiment['Predicted Sentiment'] = df_sentiment['Predicted Sentiment'].interpolate().fillna(method='bfill').fillna(
     method='ffill')
 
+# Convert sentiment scores to binary classifications (1 for positive, 0 for negative)
+threshold = 0.5
+df_sentiment['Predicted Class'] = (df_sentiment['Predicted Sentiment'] > threshold).astype(int)
+
+# Assuming df_sentiment also contains 'Actual Sentiment' and it needs conversion to binary
+df_sentiment['Actual Class'] = (df_sentiment['Actual Sentiment'] > threshold).astype(int)
+
+# Calculate metrics for sentiment model right after converting both actual and predicted to binary
+accuracy_sentiment = accuracy_score(df_sentiment['Actual Class'], df_sentiment['Predicted Class'])
+precision_sentiment, recall_sentiment, f1_score_sentiment, _ = precision_recall_fscore_support(df_sentiment['Actual Class'], df_sentiment['Predicted Class'], average='binary')
+
 # Load market model and scaler from joblib files
-scaler = joblib.load(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/scaler_market.joblib')
-market_model = joblib.load(
-    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/model_market.joblib')
+scaler = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/scaler_market.joblib')
+market_model = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/model_market.joblib')
 
 # Feature selection and scaling for market data
 features = [col for col in df_market_test.columns if col not in ['market_timestamp', 'close']]
@@ -33,6 +44,10 @@ X_test_scaled_market = scaler.transform(X_test_market)
 
 # Predict market movements using the loaded model
 y_pred_market = market_model.predict(X_test_scaled_market)
+
+# Calculate MSE and RMSE for the market model predictions
+mse_market = mean_squared_error(y_test_market, y_pred_market)
+rmse_market = sqrt(mse_market)
 
 # Enhanced trading strategy with dynamic position sizing and sentiment integration
 cash = 10000  # Starting cash
@@ -87,17 +102,24 @@ max_drawdown = daily_drawdown.min()
 annual_return = portfolio_returns.mean() * 252
 calmar_ratio = annual_return / abs(max_drawdown)
 
-# Print performance metrics
-print(f"Sharpe Ratio: {sharpe_ratio}")
-print(f"Sortino Ratio: {sortino_ratio}")
-print(f"Maximum Drawdown: {max_drawdown}")
-print(f"Calmar Ratio: {calmar_ratio}")
-print(f"Average Predicted Sentiment Score: {df_sentiment['Predicted Sentiment'].mean()}")
+# Performance metrics output
+performance_text = (
+    f"Sharpe Ratio: {sharpe_ratio:.2f}\nSortino Ratio: {sortino_ratio:.2f}\n"
+    f"Max Drawdown: {max_drawdown*100:.2f}%\nCalmar Ratio: {calmar_ratio:.2f}\n"
+    f"MSE (Market Model): {mse_market:.2f}\nRMSE (Market Model): {rmse_market:.2f}\n"
+    f"Accuracy (Sentiment Model): {accuracy_sentiment:.2f}\n"
+    f"Precision (Sentiment Model): {precision_sentiment:.2f}\n"
+    f"Recall (Sentiment Model): {recall_sentiment:.2f}\n"
+    f"F1-Score (Sentiment Model): {f1_score_sentiment:.2f}"
+)
 
-# Plot Enhanced Portfolio Value Over Time
+# Plot Enhanced Portfolio Value Over Time with Annotations for Key Performance Metrics
 plt.figure(figsize=(14, 7))
 plt.plot(portfolio_values, label='Portfolio Value', color='blue')
 plt.fill_between(range(len(portfolio_values)), min(portfolio_values), portfolio_values, color='lightblue', alpha=0.4)
+plt.text(len(portfolio_values) / 2, max(portfolio_values) * 0.95, performance_text,
+         fontsize=12, horizontalalignment='center', verticalalignment='top',
+         bbox=dict(boxstyle="round,pad=0.3", edgecolor='black', facecolor='white', alpha=0.7))
 plt.title("Random Forest Portfolio Value Over Time - With Sentiment Analysis", fontsize=16)
 plt.xlabel("Time", fontsize=14)
 plt.ylabel("Portfolio Value", fontsize=14)
