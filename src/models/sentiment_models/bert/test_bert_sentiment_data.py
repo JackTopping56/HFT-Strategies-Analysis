@@ -4,7 +4,7 @@ from google.cloud import bigquery
 from transformers import BertTokenizer, TFBertForSequenceClassification
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-BERT_MODEL_PATH = '/Users/jacktopping/Documents/HFT-Analysis/src/models/sentiment_models/bert'
+BERT_MODEL_PATH = '/Users/jacktopping/Documents/HFT-Analysis/src/models/sentiment_models/bert/bert_sentiment_model'
 
 client = bigquery.Client()
 
@@ -36,15 +36,15 @@ X_test = {
 }
 y_test = df_test['SentimentScore'].values
 
+
 # Make predictions
-y_pred = model.predict(X_test)[0]
+y_pred = model.predict(X_test)[0].flatten()
 
-
-# Evaluate the model
-mse = np.mean((y_pred.flatten() - y_test)**2)
+# Evaluate the model with mean squared error for regression
+mse = np.mean((y_pred - y_test)**2)
 print(f"Mean Squared Error: {mse}")
 
 # Save predictions
-predictions_df = pd.DataFrame({'Actual Sentiment': y_test, 'Predicted Sentiment': y_pred.flatten()})
+predictions_df = pd.DataFrame({'Actual Sentiment': y_test, 'Predicted Sentiment': y_pred})
 predictions_df.to_csv('bert_sentiment_predictions.csv', index=False)
 print("Predictions saved to 'bert_sentiment_predictions.csv'")
