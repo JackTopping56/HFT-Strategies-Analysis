@@ -85,13 +85,13 @@ train_InputExamples = convert_data_to_examples(df_train)
 train_data = convert_examples_to_tf_dataset(list(train_InputExamples), tokenizer)
 train_data = train_data.shuffle(100).batch(32).repeat(2)
 
-# Load BERT model
+# Load BERT model for regression with a single output neuron and no activation function
 model = TFBertForSequenceClassification.from_pretrained(model_name, num_labels=1)
 
-# Compile the model
+# Compile the model with mean squared error loss for regression
 optimizer = tf.keras.optimizers.Adam(learning_rate=3e-5)
-loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
-metric = tf.keras.metrics.BinaryAccuracy('accuracy')
+loss = tf.keras.losses.MeanSquaredError()
+metric = tf.keras.metrics.MeanSquaredError()
 model.compile(optimizer=optimizer, loss=loss, metrics=[metric])
 
 # Train the model
