@@ -54,7 +54,7 @@ for i in range(len(y_pred) - 1):
 
     if position == 0 and predicted_next_price > current_price * entry_threshold:
         # Adjusting position size based on volatility
-        position_size = (cash * 0.1) / current_volatility  # Example logic; customize based on your risk preference
+        position_size = (cash * 0.1) / current_volatility
         position = position_size // current_price
         cash -= position * current_price
         entry_price = current_price
