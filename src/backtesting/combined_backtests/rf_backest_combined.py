@@ -93,6 +93,9 @@ for i in range(min_length - 1):
 
 # Calculate and print performance metrics
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
+initial_value = portfolio_values[0]
+final_value = portfolio_values[-1]
+total_portfolio_return = ((final_value - initial_value) / initial_value) * 100
 sharpe_ratio = (portfolio_returns.mean() * 252 - (0.02 / 252)) / (portfolio_returns.std() * np.sqrt(252))
 negative_returns = portfolio_returns[portfolio_returns < 0]
 sortino_ratio = (portfolio_returns.mean() * 252 - (0.02 / 252)) / (negative_returns.std() * np.sqrt(252))
@@ -104,10 +107,10 @@ calmar_ratio = annual_return / abs(max_drawdown)
 
 # Performance metrics output
 performance_text = (
+    f"Total Portfolio Return (%): {total_portfolio_return:.2f}\n"
     f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
     f"Sortino Ratio: {sortino_ratio:.2f}\n"
     f"Max Drawdown: {max_drawdown*100:.2f}%\n"
-    f"Calmar Ratio: {calmar_ratio:.2f}\n"
     f"MSE (Market Model): {mse_market:.2f}\n"
     f"RMSE (Market Model): {rmse_market:.2f}\n"
     f"Accuracy (Sentiment Model): {accuracy_sentiment:.2f}\n"
@@ -115,6 +118,7 @@ performance_text = (
     f"Recall (Sentiment Model): {recall_sentiment:.2f}\n"
     f"F1-Score (Sentiment Model): {f1_score_sentiment:.2f}"
 )
+
 # Plot Enhanced Portfolio Value Over Time with Annotations for Key Performance Metrics
 plt.figure(figsize=(14, 7))
 plt.plot(portfolio_values, label='Portfolio Value (USD)', color='blue')
