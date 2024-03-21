@@ -41,6 +41,8 @@ X_test_scaled_market = scaler.transform(X_test_market.reshape(-1, X_test_market.
 
 # Make market predictions with LSTM
 y_pred_market = model.predict(X_test_scaled_market).flatten()
+mse_market = mean_squared_error(y_test_market, y_pred_market)
+rmse_market = sqrt(mse_market)
 
 # Initialize trading strategy parameters
 cash = 10000  # Starting cash
@@ -68,6 +70,9 @@ for i in range(min_length - 1):
 
 # Calculate additional performance metrics
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
+initial_value = portfolio_values[0]
+final_value = portfolio_values[-1]
+total_portfolio_return = ((final_value - initial_value) / initial_value) * 100
 sharpe_ratio = (portfolio_returns.mean() * 252) / (portfolio_returns.std() * np.sqrt(252))
 negative_returns = portfolio_returns[portfolio_returns < 0]
 sortino_ratio = (portfolio_returns.mean() * 252) / (negative_returns.std() * np.sqrt(252))
@@ -77,12 +82,13 @@ max_drawdown = daily_drawdown.min()
 annual_return = portfolio_returns.mean() * 252
 calmar_ratio = annual_return / abs(max_drawdown)
 
-# Performance metrics text for plot annotation
 performance_text = (
+    f"Total Portfolio Return (%): {total_portfolio_return:.2f}\n"
     f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
     f"Sortino Ratio: {sortino_ratio:.2f}\n"
     f"Max Drawdown: {max_drawdown*100:.2f}%\n"
-    f"Calmar Ratio: {calmar_ratio:.2f}\n"
+    f"MSE (Market Model): {mse_market:.2f}\n"
+    f"RMSE (Market Model): {rmse_market:.2f}\n"
     f"Accuracy (Sentiment Model): {accuracy_sentiment:.2f}\n"
     f"Precision (Sentiment Model): {precision_sentiment:.2f}\n"
     f"Recall (Sentiment Model): {recall_sentiment:.2f}\n"
@@ -91,11 +97,11 @@ performance_text = (
 
 # Plotting
 plt.figure(figsize=(14, 7))
-plt.plot(portfolio_values, label='Portfolio Value with Sentiment', color='blue')
+plt.plot(portfolio_values, label='Portfolio Value (USD)', color='blue')
 plt.fill_between(range(len(portfolio_values)), min(portfolio_values), portfolio_values, color='lightblue', alpha=0.4)
 plt.title("Portfolio Value Over Time with Sentiment Analysis (LSTM)", fontsize=16)
-plt.xlabel("Time", fontsize=14)
-plt.ylabel("Portfolio Value", fontsize=14)
+plt.xlabel("Time (Trading Minutes)", fontsize=14)
+plt.ylabel("Portfolio Value (USD)", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
 plt.grid(True, which='both', linestyle='--', linewidth=0.5)
 plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor":"white", "alpha":0.5, "pad":5}, verticalalignment='top')
