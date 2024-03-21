@@ -117,7 +117,7 @@ performance_text = (
 )
 # Plot Enhanced Portfolio Value Over Time with Annotations for Key Performance Metrics
 plt.figure(figsize=(14, 7))
-plt.plot(portfolio_values, label='Portfolio Value', color='blue')
+plt.plot(portfolio_values, label='Portfolio Value (USD)', color='blue')
 plt.fill_between(range(len(portfolio_values)), min(portfolio_values), portfolio_values, color='lightblue', alpha=0.4)
 plt.text(len(portfolio_values) / 2, max(portfolio_values) * 0.95, performance_text,
          fontsize=12, horizontalalignment='center', verticalalignment='top',
