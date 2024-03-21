@@ -104,15 +104,17 @@ calmar_ratio = annual_return / abs(max_drawdown)
 
 # Performance metrics output
 performance_text = (
-    f"Sharpe Ratio: {sharpe_ratio:.2f}\nSortino Ratio: {sortino_ratio:.2f}\n"
-    f"Max Drawdown: {max_drawdown*100:.2f}%\nCalmar Ratio: {calmar_ratio:.2f}\n"
-    f"MSE (Market Model): {mse_market:.2f}\nRMSE (Market Model): {rmse_market:.2f}\n"
+    f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
+    f"Sortino Ratio: {sortino_ratio:.2f}\n"
+    f"Max Drawdown: {max_drawdown*100:.2f}%\n"
+    f"Calmar Ratio: {calmar_ratio:.2f}\n"
+    f"MSE (Market Model): {mse_market:.2f}\n"
+    f"RMSE (Market Model): {rmse_market:.2f}\n"
     f"Accuracy (Sentiment Model): {accuracy_sentiment:.2f}\n"
     f"Precision (Sentiment Model): {precision_sentiment:.2f}\n"
     f"Recall (Sentiment Model): {recall_sentiment:.2f}\n"
     f"F1-Score (Sentiment Model): {f1_score_sentiment:.2f}"
 )
-
 # Plot Enhanced Portfolio Value Over Time with Annotations for Key Performance Metrics
 plt.figure(figsize=(14, 7))
 plt.plot(portfolio_values, label='Portfolio Value', color='blue')
@@ -120,9 +122,9 @@ plt.fill_between(range(len(portfolio_values)), min(portfolio_values), portfolio_
 plt.text(len(portfolio_values) / 2, max(portfolio_values) * 0.95, performance_text,
          fontsize=12, horizontalalignment='center', verticalalignment='top',
          bbox=dict(boxstyle="round,pad=0.3", edgecolor='black', facecolor='white', alpha=0.7))
-plt.title("Random Forest Portfolio Value Over Time - With Sentiment Analysis", fontsize=16)
-plt.xlabel("Time", fontsize=14)
-plt.ylabel("Portfolio Value", fontsize=14)
+plt.title("Portfolio Value Over Time with Sentiment Analysis (Random Forest)", fontsize=16)
+plt.xlabel("Time (Trading Minutes)", fontsize=14)
+plt.ylabel("Portfolio Value (USD)", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
 plt.grid(True, which='both', linestyle='--', linewidth=0.5)
 plt.show()
