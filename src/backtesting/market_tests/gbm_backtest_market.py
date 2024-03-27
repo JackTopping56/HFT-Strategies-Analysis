@@ -4,6 +4,7 @@ import joblib
 from google.cloud import bigquery
 from google.oauth2 import service_account
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
 
 client = bigquery.Client()
 
@@ -47,6 +48,10 @@ for i in range(len(y_pred) - 1):
 risk_free_rate = 0.02 / 252
 # Calculate performance metrics
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
+initial_value = portfolio_values[0]
+final_value = portfolio_values[-1]
+total_portfolio_return = round(((final_value - initial_value) / initial_value) * 100, 2)
+total_portfolio_return = float(total_portfolio_return)
 annual_return = portfolio_returns.mean() * 252
 annual_volatility = portfolio_returns.std() * np.sqrt(252)
 sharpe_ratio = (annual_return - risk_free_rate) / annual_volatility
@@ -61,24 +66,32 @@ rolling_max = pd.Series(portfolio_values).cummax()
 daily_drawdown = pd.Series(portfolio_values) / rolling_max - 1
 max_drawdown = daily_drawdown.min()
 
+# Calculate MSE and RMSE
+mse_market = mean_squared_error(y_test, y_pred)
+rmse_market = np.sqrt(mse_market)
+
 # Calculate Calmar Ratio
 calmar_ratio = annual_return / abs(max_drawdown)
 
-# Print performance metrics
-print(f"Annual Return: {annual_return:.2%}")
-print(f"Annual Volatility: {annual_volatility:.2%}")
-print(f"Sharpe Ratio: {sharpe_ratio:.4f}")
-print(f"Sortino Ratio: {sortino_ratio:.4f}")
-print(f"Maximum Drawdown: {max_drawdown:.2%}")
-print(f"Calmar Ratio: {calmar_ratio:.4f}")
+performance_text = (
+    f"Total Portfolio Return (%): {round(total_portfolio_return, 2)}\n"
+    f"Sharpe Ratio: {round(sharpe_ratio, 2)}\n"
+    f"Sortino Ratio: {round(sortino_ratio, 2)}\n"
+    f"Max Drawdown: {round(max_drawdown*100, 2)}%\n"
+    f"MSE (Market Model): {round(mse_market, 2)}\n"
+    f"RMSE (Market Model): {round(rmse_market, 2)}\n"
+)
 
 
-# Plot portfolio value over time with improvements
-plt.figure(figsize=(12, 8))
-plt.plot(portfolio_values, label='XGBoost Strategy', color='blue')
-plt.title("Enhanced XGBoost Strategy Portfolio Value Over Time", fontsize=16)
-plt.xlabel("Time", fontsize=14)
-plt.ylabel("Portfolio Value", fontsize=14)
+# Plotting
+plt.figure(figsize=(14, 7))
+plt.plot(portfolio_values, label='Portfolio Value (USD)', color='blue')
+plt.fill_between(range(len(portfolio_values)), min(portfolio_values), portfolio_values, color='lightblue', alpha=0.4)
+plt.title("Portfolio Value Over Time (XGBoost)", fontsize=16)
+plt.xlabel("Time (Trading Minutes)", fontsize=14)
+plt.ylabel("Portfolio Value (USD)", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
 plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor":"white", "alpha":0.5, "pad":5}, verticalalignment='top')
 plt.show()
+
