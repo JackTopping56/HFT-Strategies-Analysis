@@ -3,6 +3,7 @@ import pandas as pd
 import joblib
 from google.cloud import bigquery
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
 
 client = bigquery.Client()
 
@@ -67,19 +68,33 @@ max_drawdown = daily_drawdown.min()
 annual_return = portfolio_returns.mean() * 252
 calmar_ratio = annual_return / abs(max_drawdown)
 
-# Print performance metrics
-print(f"Annual Return: {annual_return:.2%}")
-print(f"Annual Volatility: {portfolio_returns.std() * np.sqrt(252):.2%}")
-print(f"Sharpe Ratio: {sharpe_ratio:.4f}")
-print(f"Sortino Ratio: {sortino_ratio:.4f}")
-print(f"Maximum Drawdown: {max_drawdown:.2%}")
-print(f"Calmar Ratio: {calmar_ratio:.4f}")
+# Calculate MSE and RMSE
+mse_market = mean_squared_error(y_test, y_pred)
+rmse_market = np.sqrt(mse_market)
 
-# Plot portfolio value over time
-plt.figure(figsize=(10, 6))
-plt.plot(portfolio_values, label='Portfolio Value')
-plt.title("Enhanced SVM Portfolio Value Over Time")
-plt.xlabel("Time")
-plt.ylabel("Value")
-plt.legend()
+# Calculate the total portfolio return
+initial_value = portfolio_values[0]
+final_value = portfolio_values[-1]
+total_portfolio_return = ((final_value - initial_value) / initial_value) * 100
+
+performance_text = (
+    f"Total Portfolio Return (%): {total_portfolio_return:.2f}\n"
+    f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
+    f"Sortino Ratio: {sortino_ratio:.2f}\n"
+    f"Max Drawdown: {max_drawdown*100:.2f}%\n"
+    f"MSE (Market Model): {mse_market:.2f}\n"
+    f"RMSE (Market Model): {rmse_market:.2f}\n"
+)
+
+
+# Plotting
+plt.figure(figsize=(14, 7))
+plt.plot(portfolio_values, label='Portfolio Value (USD)', color='blue')
+plt.fill_between(range(len(portfolio_values)), min(portfolio_values), portfolio_values, color='lightblue', alpha=0.4)
+plt.title("Portfolio Value Over Time (SVM)", fontsize=16)
+plt.xlabel("Time (Trading Minutes)", fontsize=14)
+plt.ylabel("Portfolio Value (USD)", fontsize=14)
+plt.legend(loc="upper left", fontsize=12)
+plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor": "white", "alpha": 0.5, "pad": 5}, verticalalignment='top')
 plt.show()
