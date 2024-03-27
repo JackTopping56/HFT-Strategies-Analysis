@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from google.cloud import bigquery
 import joblib
+from sklearn.metrics import mean_squared_error
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 
@@ -37,7 +38,6 @@ y_pred = model.predict(X_test_scaled).flatten()
 cash = 10000  # Starting cash
 position = 0  # No position initially
 portfolio_values = [cash]
-# New Parameters
 entry_threshold = 1.02  # Making entry condition more selective
 stop_loss_percentage = 0.1  # Widening stop loss a bit to avoid market noise
 take_profit_percentage = 0.15  # Looking for higher profit margin
@@ -65,29 +65,45 @@ for i in range(len(y_pred) - 1):
             position = 0
 
     portfolio_values.append(cash + position * current_price if position > 0 else cash)
-# Calculate performance metrics
+
+# Calculate additional performance metrics
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
+initial_value = portfolio_values[0]
+final_value = portfolio_values[-1]
+total_portfolio_return = ((final_value - initial_value) / initial_value) * 100
 sharpe_ratio = (portfolio_returns.mean() * 252) / (portfolio_returns.std() * np.sqrt(252))
-sortino_ratio = (portfolio_returns.mean() * 252) / portfolio_returns[portfolio_returns < 0].std() * np.sqrt(252)
-rolling_max = np.maximum.accumulate(portfolio_values)
-daily_drawdown = portfolio_values / rolling_max - 1
-max_drawdown = np.min(daily_drawdown)
+sortino_ratio = (portfolio_returns.mean() * 252) / (portfolio_returns[portfolio_returns < 0].std() * np.sqrt(252))
+rolling_max = pd.Series(portfolio_values).cummax()
+daily_drawdown = pd.Series(portfolio_values) / rolling_max - 1
+max_drawdown = daily_drawdown.min()
 annual_return = portfolio_returns.mean() * 252
-calmar_ratio = annual_return / -max_drawdown
+calmar_ratio = annual_return / abs(max_drawdown)
 
-# Display performance metrics
-print(f"Annual Return: {annual_return:.2%}")
-print(f"Annual Volatility: {portfolio_returns.std() * np.sqrt(252):.2%}")
-print(f"Sharpe Ratio: {sharpe_ratio:.4f}")
-print(f"Sortino Ratio: {sortino_ratio:.4f}")
-print(f"Maximum Drawdown: {max_drawdown:.2%}")
-print(f"Calmar Ratio: {calmar_ratio:.4f}")
+y_true = df_test[target_variable][1:].values
 
-# Plot portfolio value over time
-plt.figure(figsize=(10, 6))
-plt.plot(portfolio_values, label='Portfolio Value')
-plt.title("Enhanced CNN Portfolio Value Over Time")
-plt.xlabel("Time")
-plt.ylabel("Value")
-plt.legend()
+# Calculate MSE and RMSE
+mse_market = mean_squared_error(y_true, y_pred[:-1])
+rmse_market = np.sqrt(mse_market)
+
+performance_text = (
+    f"Total Portfolio Return (%): {total_portfolio_return:.2f}\n"
+    f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
+    f"Sortino Ratio: {sortino_ratio:.2f}\n"
+    f"Max Drawdown: {max_drawdown*100:.2f}%\n"
+    f"MSE (Market Model): {mse_market:.2f}\n"
+    f"RMSE (Market Model): {rmse_market:.2f}\n"
+)
+
+
+# Plotting
+plt.figure(figsize=(14, 7))
+plt.plot(portfolio_values, label='Portfolio Value (USD)', color='blue')
+plt.fill_between(range(len(portfolio_values)), min(portfolio_values), portfolio_values, color='lightblue', alpha=0.4)
+plt.title("Portfolio Value Over Time (CNN)", fontsize=16)
+plt.xlabel("Time (Trading Minutes)", fontsize=14)
+plt.ylabel("Portfolio Value (USD)", fontsize=14)
+plt.legend(loc="upper left", fontsize=12)
+plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor":"white", "alpha":0.5, "pad":5}, verticalalignment='top')
 plt.show()
+
