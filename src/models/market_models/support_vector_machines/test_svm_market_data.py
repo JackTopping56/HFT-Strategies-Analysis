@@ -6,7 +6,6 @@ from sklearn.metrics import mean_squared_error
 import joblib
 import matplotlib.pyplot as plt
 
-
 client = bigquery.Client()
 
 # Load the testing data from BigQuery

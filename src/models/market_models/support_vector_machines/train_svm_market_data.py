@@ -7,15 +7,12 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 import joblib
 
-
 client = bigquery.Client()
-
 
 table_id_train = 'lucky-science-410310.final_datasets.market_training_data'
 query_train = f"SELECT * FROM `{table_id_train}`"
 df_train = client.query(query_train).to_dataframe()
 
-# Sample a smaller subset for faster initial experiments
 df_train_sampled = df_train.sample(frac=0.1, random_state=42)
 
 # Select numeric features and target variable
@@ -39,7 +36,6 @@ joblib.dump(scaler, 'scaler_market_svm.joblib')  # Save the scaler for later use
 # Initialize SVR
 model = SVR()
 
-# Simplified parameter grid for initial exploration
 param_grid = {
     'C': [1, 10],  # Regularization parameter
     'gamma': ['scale'],  # Kernel coefficient, start with 'scale'
@@ -50,11 +46,11 @@ param_grid = {
 grid_search_sampled = GridSearchCV(model, param_grid, cv=5, scoring='neg_mean_squared_error', n_jobs=-1, verbose=2)
 grid_search_sampled.fit(X_train_scaled_sampled, y_train_sampled)
 
-# Save the best model from this initial exploration
+# Save the best model
 best_svm_model_sampled = grid_search_sampled.best_estimator_
 joblib.dump(best_svm_model_sampled, 'svm_market_model_sampled.joblib')
 
-# Print best parameters and model performance on the sampled data
+# Print best parameters and model performance
 print(f"Best parameters: {grid_search_sampled.best_params_}")
 y_pred_sampled = best_svm_model_sampled.predict(X_train_scaled_sampled)
 mse_sampled = mean_squared_error(y_train_sampled, y_pred_sampled)
