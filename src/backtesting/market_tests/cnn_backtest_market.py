@@ -25,8 +25,10 @@ df_test[target_variable] = df_test[target_variable].astype(np.float32)
 X_test = df_test[features].values.reshape((df_test.shape[0], len(features), 1))
 
 # Load the scaler and model
-scaler = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/convolutional_neural_networks/scaler_market_cnn.joblib')
-model = load_model('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/convolutional_neural_networks/cnn_market_model.h5')
+scaler = joblib.load(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/convolutional_neural_networks/scaler_market_cnn.joblib')
+model = load_model(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/convolutional_neural_networks/cnn_market_model.h5')
 
 # Normalize features
 X_test_scaled = scaler.transform(X_test.reshape(-1, X_test.shape[1])).reshape(X_test.shape)
@@ -89,11 +91,10 @@ performance_text = (
     f"Total Portfolio Return (%): {total_portfolio_return:.2f}\n"
     f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
     f"Sortino Ratio: {sortino_ratio:.2f}\n"
-    f"Max Drawdown: {max_drawdown*100:.2f}%\n"
+    f"Max Drawdown: {max_drawdown * 100:.2f}%\n"
     f"MSE (Market Model): {mse_market:.2f}\n"
     f"RMSE (Market Model): {rmse_market:.2f}\n"
 )
-
 
 # Plotting
 plt.figure(figsize=(14, 7))
@@ -104,6 +105,6 @@ plt.xlabel("Time (Trading Minutes)", fontsize=14)
 plt.ylabel("Portfolio Value (USD)", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
 plt.grid(True, which='both', linestyle='--', linewidth=0.5)
-plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor":"white", "alpha":0.5, "pad":5}, verticalalignment='top')
+plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor": "white", "alpha": 0.5, "pad": 5},
+            verticalalignment='top')
 plt.show()
-
