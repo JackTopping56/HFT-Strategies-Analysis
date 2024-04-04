@@ -6,7 +6,6 @@ import joblib
 import matplotlib.pyplot as plt
 import xgboost as xgb
 
-
 client = bigquery.Client()
 
 table_id_test = 'lucky-science-410310.final_datasets.market_test_data'

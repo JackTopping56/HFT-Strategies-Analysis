@@ -6,7 +6,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 import joblib
 
-
 client = bigquery.Client()
 
 table_id_train = 'lucky-science-410310.final_datasets.market_training_data'
@@ -15,7 +14,7 @@ df_train = client.query(query_train).to_dataframe()
 
 # Select numeric and non-numeric features
 numeric_features = df_train.select_dtypes(include=[np.number]).columns.tolist()
-target_variable = 'close'  # Update this if needed
+target_variable = 'close'
 features = [col for col in numeric_features if col != target_variable]
 
 # Convert to float32 to save memory
