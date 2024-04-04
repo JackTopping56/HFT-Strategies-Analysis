@@ -5,7 +5,6 @@ from google.cloud import bigquery
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import joblib
 
-
 client = bigquery.Client()
 
 test_table_id = 'lucky-science-410310.final_datasets.orderbook_test_data'

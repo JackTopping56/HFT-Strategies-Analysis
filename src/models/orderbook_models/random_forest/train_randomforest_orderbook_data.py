@@ -10,7 +10,6 @@ import joblib
 
 client = bigquery.Client()
 
-
 train_table_id = 'lucky-science-410310.final_datasets.orderbook_training_data'
 train_query = f"SELECT * FROM `{train_table_id}`"
 df_train = client.query(train_query).to_dataframe()
@@ -50,7 +49,8 @@ X_train_pca = pca.fit_transform(X_train_scaled)
 joblib.dump(pca, 'pca_orderbook.joblib')  # Save the PCA
 
 # Train the RandomForestClassifier with verbosity
-clf = RandomForestClassifier(random_state=42, class_weight='balanced', n_jobs=-1, verbose=1)  # Added verbose=1 for more output
+clf = RandomForestClassifier(random_state=42, class_weight='balanced', n_jobs=-1,
+                             verbose=1)  # Added verbose=1 for more output
 
 param_grid = {
     'n_estimators': [50, 100],
@@ -72,13 +72,11 @@ feature_importances = best_model_initial.feature_importances_
 # Sort the feature importances in descending order and get their indices
 sorted_indices = np.argsort(feature_importances)[::-1]
 
-
 num_features_to_keep = len(sorted_indices) // 2  # Keep top 50% features
 top_feature_indices = sorted_indices[:num_features_to_keep]
 
 # Prepare data with reduced features
 X_train_reduced = X_train_scaled[:, top_feature_indices]
-
 
 grid_search_reduced = GridSearchCV(clf, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
 grid_search_reduced.fit(X_train_reduced, y_train)
