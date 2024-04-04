@@ -6,7 +6,6 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D, MaxPooling1D, Flatten, Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping
 
-
 client = bigquery.Client()
 
 # Load the training data from BigQuery
@@ -35,7 +34,8 @@ X_train_sampled = np.reshape(X_train_sampled, (X_train_sampled.shape[0], X_train
 
 # Normalize features
 scaler = MinMaxScaler(feature_range=(0, 1))
-X_train_scaled_sampled = scaler.fit_transform(X_train_sampled.reshape(-1, X_train_sampled.shape[1])).reshape(X_train_sampled.shape)
+X_train_scaled_sampled = scaler.fit_transform(X_train_sampled.reshape(-1, X_train_sampled.shape[1])).reshape(
+    X_train_sampled.shape)
 joblib.dump(scaler, 'scaler_market_cnn.joblib')  # Save the scaler
 
 # Define CNN model

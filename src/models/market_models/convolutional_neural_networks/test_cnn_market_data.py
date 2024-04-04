@@ -4,7 +4,6 @@ from google.cloud import bigquery
 import joblib
 from tensorflow.keras.models import load_model
 
-
 client = bigquery.Client()
 
 # Load the test data from BigQuery
@@ -14,7 +13,7 @@ df_test = client.query(query_test).to_dataframe()
 
 # Select features and the target variable
 numeric_features = df_test.select_dtypes(include=[np.number]).columns.tolist()
-target_variable = 'close'  # Update if your target variable name is different
+target_variable = 'close'
 features = [col for col in numeric_features if col != target_variable]
 
 # Convert to float32 for CNN compatibility
@@ -26,7 +25,6 @@ X_test = df_test[features].values
 y_test = df_test[target_variable].values
 
 # Reshape input to be [samples, time steps, features] for CNN
-# Update the reshape parameters according to your CNN input shape
 X_test_reshaped = X_test.reshape((X_test.shape[0], X_test.shape[1], 1))
 
 # Load scaler and CNN model
