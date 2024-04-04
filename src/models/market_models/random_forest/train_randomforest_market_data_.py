@@ -13,14 +13,13 @@ table_id_train = 'lucky-science-410310.final_datasets.market_training_data'
 query_train = f"SELECT * FROM `{table_id_train}`"
 df_train = client.query(query_train).to_dataframe()
 
-
 sample_fraction = 0.1
 if len(df_train) > 100000:
     df_train = df_train.sample(frac=sample_fraction, random_state=42)
 
 # Select numeric features and the target variable
 numeric_features = df_train.select_dtypes(include=[np.number]).columns.tolist()
-target_variable = 'close'  # Update this if needed
+target_variable = 'close'
 features = [col for col in numeric_features if col != target_variable]
 
 # Convert to float32 to save memory
@@ -45,7 +44,8 @@ param_distributions = {
     'min_samples_leaf': [1, 2, 4],
     'max_features': [1.0, 'sqrt', 'log2']
 }
-random_search = RandomizedSearchCV(model, param_distributions, n_iter=20, cv=5, scoring='neg_mean_squared_error', n_jobs=-1, verbose=2, random_state=42)
+random_search = RandomizedSearchCV(model, param_distributions, n_iter=20, cv=5, scoring='neg_mean_squared_error',
+                                   n_jobs=-1, verbose=2, random_state=42)
 random_search.fit(X_train_scaled, y_train)
 
 # Save the best model

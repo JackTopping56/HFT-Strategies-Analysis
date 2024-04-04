@@ -5,24 +5,20 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 import joblib
 import matplotlib.pyplot as plt
 
-
 client = bigquery.Client()
 
-
-table_id_test = 'lucky-science-410310.final_datasets.market_test_data'  # Update this path
+table_id_test = 'lucky-science-410310.final_datasets.market_test_data'
 query_test = f"SELECT * FROM `{table_id_test}`"
 df_test = client.query(query_test).to_dataframe()
 
 scaler = joblib.load('scaler_market.joblib')
 model = joblib.load('model_market.joblib')
 
-
 # Identify numeric columns in the DataFrame
 numeric_cols = df_test.select_dtypes(include=[np.number]).columns.tolist()
 
 # Adjust the features list to include only numeric columns
-features = [col for col in numeric_cols if col != 'close']  # Assuming 'close' is your target variable
-
+features = [col for col in numeric_cols if col != 'close']
 
 X_test = df_test[features].astype(np.float32)
 
