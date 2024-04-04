@@ -25,7 +25,6 @@ df_sentiment['Predicted Sentiment'] = df_sentiment['Predicted Sentiment'].interp
 threshold = 0.5
 df_sentiment['Predicted Class'] = (df_sentiment['Predicted Sentiment'] > threshold).astype(int)
 
-# Assuming df_sentiment also contains 'Actual Sentiment' and it needs conversion to binary
 df_sentiment['Actual Class'] = (df_sentiment['Actual Sentiment'] > threshold).astype(int)
 
 # Calculate metrics for sentiment model right after converting both actual and predicted to binary
