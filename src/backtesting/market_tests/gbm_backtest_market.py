@@ -12,16 +12,16 @@ client = bigquery.Client()
 query_test = "SELECT * FROM `lucky-science-410310.final_datasets.market_test_data`"
 df_test = client.query(query_test).to_dataframe()
 
-
-scaler = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/gradient_boosting_machines/scaler_market_xgboost.joblib')
-model = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/gradient_boosting_machines/xgboost_market_model.joblib')
+scaler = joblib.load(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/gradient_boosting_machines/scaler_market_xgboost.joblib')
+model = joblib.load(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/gradient_boosting_machines/xgboost_market_model.joblib')
 
 # Prepare the test data
 features = [col for col in df_test.columns if col not in ['market_timestamp', 'close']]
 X_test = df_test[features]
 y_test = df_test['close'].astype(np.float32)
 X_test_scaled = scaler.transform(X_test)
-
 
 y_pred = model.predict(X_test_scaled)
 
@@ -77,11 +77,10 @@ performance_text = (
     f"Total Portfolio Return (%): {round(total_portfolio_return, 2)}\n"
     f"Sharpe Ratio: {round(sharpe_ratio, 2)}\n"
     f"Sortino Ratio: {round(sortino_ratio, 2)}\n"
-    f"Max Drawdown: {round(max_drawdown*100, 2)}%\n"
+    f"Max Drawdown: {round(max_drawdown * 100, 2)}%\n"
     f"MSE (Market Model): {round(mse_market, 2)}\n"
     f"RMSE (Market Model): {round(rmse_market, 2)}\n"
 )
-
 
 # Plotting
 plt.figure(figsize=(14, 7))
@@ -92,6 +91,6 @@ plt.xlabel("Time (Trading Minutes)", fontsize=14)
 plt.ylabel("Portfolio Value (USD)", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
 plt.grid(True, which='both', linestyle='--', linewidth=0.5)
-plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor":"white", "alpha":0.5, "pad":5}, verticalalignment='top')
+plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor": "white", "alpha": 0.5, "pad": 5},
+            verticalalignment='top')
 plt.show()
-
