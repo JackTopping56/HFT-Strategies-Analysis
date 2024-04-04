@@ -23,7 +23,7 @@ df_train = client.query(train_query).to_dataframe()
 tokenizer = Tokenizer(num_words=5000, oov_token="<OOV>")
 tokenizer.fit_on_texts(df_train['ProcessedArticleTitle'])
 sequences = tokenizer.texts_to_sequences(df_train['ProcessedArticleTitle'])
-max_length = max([len(x) for x in sequences])  # Or a predefined max length
+max_length = max([len(x) for x in sequences])
 X_train = pad_sequences(sequences, maxlen=max_length, padding='post')
 y_train = df_train['SentimentScore'].values
 

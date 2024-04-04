@@ -7,8 +7,6 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 from src.models.sentiment_models.long_short_term_memory.train_lstm_sentiment_data import max_length
 
-
-
 client = bigquery.Client()
 
 # Load the test data
@@ -29,7 +27,7 @@ y_test = df_test['SentimentScore'].values
 y_pred = model.predict(X_test)
 
 # Evaluate the model
-mse = np.mean((y_pred.flatten() - y_test)**2)
+mse = np.mean((y_pred.flatten() - y_test) ** 2)
 print(f"Mean Squared Error: {mse}")
 
 # Save predictions
