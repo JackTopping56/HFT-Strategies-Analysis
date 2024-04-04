@@ -13,17 +13,22 @@ query_test = "SELECT * FROM `lucky-science-410310.final_datasets.market_test_dat
 df_market_test = client.query(query_test).to_dataframe()
 
 # Load the sentiment predictions from BERT and interpolate missing values
-df_sentiment = pd.read_csv('/Users/jacktopping/Documents/HFT-Analysis/src/models/sentiment_models/bert/bert_sentiment_predictions.csv')
-df_sentiment['Predicted Sentiment'] = df_sentiment['Predicted Sentiment'].interpolate().fillna(method='bfill').fillna(method='ffill')
+df_sentiment = pd.read_csv(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/sentiment_models/bert/bert_sentiment_predictions.csv')
+df_sentiment['Predicted Sentiment'] = df_sentiment['Predicted Sentiment'].interpolate().fillna(method='bfill').fillna(
+    method='ffill')
 
 threshold = 0.00000005
 df_sentiment['Predicted Class'] = (df_sentiment['Predicted Sentiment'] > threshold).astype(int)
 df_sentiment['Actual Class'] = (df_sentiment['Actual Sentiment'] > threshold).astype(int)
 accuracy_sentiment = accuracy_score(df_sentiment['Actual Class'], df_sentiment['Predicted Class'])
-precision_sentiment, recall_sentiment, f1_score_sentiment, _ = precision_recall_fscore_support(df_sentiment['Actual Class'], df_sentiment['Predicted Class'], average='binary')
+precision_sentiment, recall_sentiment, f1_score_sentiment, _ = precision_recall_fscore_support(
+    df_sentiment['Actual Class'], df_sentiment['Predicted Class'], average='binary')
 
-scaler = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/support_vector_machines/scaler_market_svm.joblib')
-model = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/support_vector_machines/svm_market_model_sampled.joblib')
+scaler = joblib.load(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/support_vector_machines/scaler_market_svm.joblib')
+model = joblib.load(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/support_vector_machines/svm_market_model_sampled.joblib')
 
 # Prepare the test data
 features = [col for col in df_market_test.columns if col not in ['market_timestamp', 'close']]
@@ -74,7 +79,6 @@ for i in range(min_length - 1):
 
     portfolio_values.append(cash + (position * current_price if position > 0 else 0))
 
-
 # Calculate additional performance metrics
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
 initial_value = portfolio_values[0]
@@ -93,7 +97,7 @@ performance_text = (
     f"Total Portfolio Return (%): {total_portfolio_return:.2f}\n"
     f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
     f"Sortino Ratio: {sortino_ratio:.2f}\n"
-    f"Max Drawdown: {max_drawdown*100:.2f}%\n"
+    f"Max Drawdown: {max_drawdown * 100:.2f}%\n"
     f"MSE (Market Model): {mse_market:.2f}\n"
     f"RMSE (Market Model): {rmse_market:.2f}\n"
     f"Accuracy (Sentiment Model): {accuracy_sentiment:.2f}\n"
@@ -111,5 +115,6 @@ plt.xlabel("Time (Trading Minutes)", fontsize=14)
 plt.ylabel("Portfolio Value (USD)", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
 plt.grid(True, which='both', linestyle='--', linewidth=0.5)
-plt.figtext(0.5, 0.85, performance_text, ha="center", fontsize=10, bbox={"facecolor":"white", "alpha":0.5, "pad":5}, verticalalignment='top')
+plt.figtext(0.5, 0.85, performance_text, ha="center", fontsize=10, bbox={"facecolor": "white", "alpha": 0.5, "pad": 5},
+            verticalalignment='top')
 plt.show()
