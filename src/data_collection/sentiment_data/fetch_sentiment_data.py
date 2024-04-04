@@ -2,7 +2,6 @@ import csv
 import datetime
 from google.cloud import bigquery
 
-# Path to your BigQuery credentials file
 credential_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
 bigquery_client = bigquery.Client.from_service_account_json(credential_path)
 
@@ -13,7 +12,7 @@ schema = [
     bigquery.SchemaField("ArticleDate", "DATE", mode="REQUIRED"),
 ]
 
-# Paths to your CSV files
+#
 ticker_symbols_file_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/sentiment_data/snp500_ticker_symbols.csv'
 article_data_file_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/sentiment_data/snp500_article_data_raw.csv'
 
@@ -51,12 +50,11 @@ with open(article_data_file_path, mode='r') as file:
                 formatted_date = article_date.isoformat()
                 articles.append({"Symbol": symbol, "ArticleTitle": row['title'], "ArticleDate": formatted_date})
         else:
-            # If date is empty or malformed, you might want to log this or handle it accordingly
+
             continue
 
-
 # Batch insert into BigQuery
-batch_size = 10  # Define your batch size
+batch_size = 10
 for i in range(0, len(articles), batch_size):
     batch = articles[i:i + batch_size]
     errors = bigquery_client.insert_rows_json(

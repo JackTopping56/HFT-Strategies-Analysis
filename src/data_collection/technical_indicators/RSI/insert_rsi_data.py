@@ -1,15 +1,10 @@
 import os
 from google.cloud import bigquery
 
-
-service_account_key_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/src/data_collection/sentiment_data/lucky-science-410310-ef5253ad49d4.json'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
-
-
-directory_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/technical_indicators/raw_rsi_data_1min'  # Replace with the path to your local CSV files
-project_id = 'lucky-science-410310'  # Replace with your Google Cloud project ID
-dataset_id = 'snp500_technical_indicator_data'  # Replace with your dataset ID
-table_id = 'snp500_rsi_data_raw'  # Replace with your table name
+directory_path = '/Users/jacktopping/Documents/HFT-Strategies-Analysis/data/raw/technical_indicators/raw_rsi_data_1min'
+project_id = 'lucky-science-410310'
+dataset_id = 'snp500_technical_indicator_data'
+table_id = 'snp500_rsi_data_raw'
 schema = [
     bigquery.SchemaField("time", "TIMESTAMP", mode="REQUIRED"),
     bigquery.SchemaField("RSI", "FLOAT64", mode="NULLABLE"),
