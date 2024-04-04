@@ -13,7 +13,6 @@ else:
 # Download the VADER lexicon
 nltk.download('vader_lexicon')
 
-# Initialize a BigQuery client
 client = bigquery.Client()
 
 # Define the query to fetch the cleaned data
@@ -41,23 +40,23 @@ df_cleaned['SentimentScore'] = df_cleaned['ProcessedArticleTitle'].apply(get_sen
 # Display the DataFrame to verify
 print(df_cleaned.head())
 
-
 sentiment_table_id = 'lucky-science-410310.snp500_sentiment_data.snp500_sentiment_scores'
 
 # Define the job configuration
 job_config = bigquery.LoadJobConfig(
     schema=[
         bigquery.SchemaField("Symbol", "STRING", mode="REQUIRED"),
-        bigquery.SchemaField("ProcessedArticleTitle", "STRING",mode="REQUIRED"),
-        bigquery.SchemaField("ArticleDate", "DATE",mode="REQUIRED"),
-        bigquery.SchemaField("SentimentScore", "FLOAT",mode="NULLABLE"),
+        bigquery.SchemaField("ProcessedArticleTitle", "STRING", mode="REQUIRED"),
+        bigquery.SchemaField("ArticleDate", "DATE", mode="REQUIRED"),
+        bigquery.SchemaField("SentimentScore", "FLOAT", mode="NULLABLE"),
     ],
     write_disposition="WRITE_TRUNCATE",
 )
 
 # Load the DataFrame with sentiment scores into the new BigQuery table
 job = client.load_table_from_dataframe(
-    df_cleaned[['Symbol', 'ProcessedArticleTitle', 'ArticleDate', 'SentimentScore']], sentiment_table_id, job_config=job_config
+    df_cleaned[['Symbol', 'ProcessedArticleTitle', 'ArticleDate', 'SentimentScore']], sentiment_table_id,
+    job_config=job_config
 )
 
 # Wait for the job to complete

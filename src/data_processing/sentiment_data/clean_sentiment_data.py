@@ -6,11 +6,10 @@ from nltk.corpus import stopwords
 import nltk
 import ssl
 
-
 try:
     _create_unverified_https_context = ssl._create_unverified_context
 except AttributeError:
-    # Legacy Python that doesn't verify HTTPS certificates by default
+
     pass
 else:
     # Handle target environment that doesn't support HTTPS verification
@@ -20,15 +19,12 @@ else:
 nltk.download('punkt')
 nltk.download('stopwords')
 
-# Initialize a BigQuery client
 client = bigquery.Client()
-
 
 query = """
 SELECT Symbol, ArticleTitle, ArticleDate
 FROM `lucky-science-410310.snp500_sentiment_data.snp500_sentiment_data_raw`
 """
-
 
 try:
     query_job = client.query(query)
@@ -42,7 +38,7 @@ def preprocess_text(text):
     # Lowercase
     text = text.lower()
     # Remove punctuation and numbers
-    text = re.sub(r'[^a-zA-Z\s]', '', text, re.I|re.A)
+    text = re.sub(r'[^a-zA-Z\s]', '', text, re.I | re.A)
     # Tokenize
     tokens = nltk.word_tokenize(text)
     # Remove stopwords
@@ -64,10 +60,8 @@ print(df[duplicates])
 # Remove duplicates and keep the first occurrence
 df_unique = df.drop_duplicates(subset=['Symbol', 'ProcessedArticleTitle', 'ArticleDate'], keep='first')
 
-
 # Show the first few rows to verify
 print(df.head())
-
 
 processed_table_id = 'lucky-science-410310.snp500_sentiment_data.snp500_sentiment_data_processed'
 
@@ -82,9 +76,9 @@ job_config = bigquery.LoadJobConfig(
 )
 
 job = client.load_table_from_dataframe(
-    df_unique[['Symbol', 'ArticleTitle', 'ProcessedArticleTitle', 'ArticleDate']], processed_table_id, job_config=job_config
+    df_unique[['Symbol', 'ArticleTitle', 'ProcessedArticleTitle', 'ArticleDate']], processed_table_id,
+    job_config=job_config
 )
-
 
 job.result()
 
