@@ -10,7 +10,6 @@ regressor = joblib.load('random_forest_sentiment_model.joblib')
 
 client = bigquery.Client()
 
-
 test_table_id = 'lucky-science-410310.final_datasets.sentiment_test_data'
 test_query = f"SELECT * FROM `{test_table_id}`"
 df_test = client.query(test_query).to_dataframe()

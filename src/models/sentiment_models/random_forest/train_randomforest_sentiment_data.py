@@ -4,7 +4,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestRegressor
 import joblib
 
-
 client = bigquery.Client()
 
 # Load the training data from BigQuery
