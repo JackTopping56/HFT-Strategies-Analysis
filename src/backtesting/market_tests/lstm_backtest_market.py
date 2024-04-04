@@ -86,16 +86,14 @@ initial_value = portfolio_values[0]
 final_value = portfolio_values[-1]
 total_portfolio_return = ((final_value - initial_value) / initial_value) * 100
 
-
 performance_text = (
     f"Total Portfolio Return (%): {total_portfolio_return:.2f}\n"
     f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
     f"Sortino Ratio: {sortino_ratio:.2f}\n"
-    f"Max Drawdown: {max_drawdown*100:.2f}%\n"
+    f"Max Drawdown: {max_drawdown * 100:.2f}%\n"
     f"MSE (Market Model): {mse_market:.2f}\n"
     f"RMSE (Market Model): {rmse_market:.2f}\n"
 )
-
 
 # Plotting
 plt.figure(figsize=(14, 7))
@@ -106,5 +104,6 @@ plt.xlabel("Time (Trading Minutes)", fontsize=14)
 plt.ylabel("Portfolio Value (USD)", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
 plt.grid(True, which='both', linestyle='--', linewidth=0.5)
-plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor": "white", "alpha": 0.5, "pad": 5}, verticalalignment='top')
+plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor": "white", "alpha": 0.5, "pad": 5},
+            verticalalignment='top')
 plt.show()
