@@ -7,13 +7,13 @@ from sklearn.metrics import mean_squared_error
 
 client = bigquery.Client()
 
-# Load the test dataset from BigQuery
 query_test = "SELECT * FROM `lucky-science-410310.final_datasets.market_test_data`"
 df_test = client.query(query_test).to_dataframe()
 
-# Load your scaler and SVM model
-scaler = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/support_vector_machines/scaler_market_svm.joblib')
-model = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/support_vector_machines/svm_market_model_sampled.joblib')
+scaler = joblib.load(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/support_vector_machines/scaler_market_svm.joblib')
+model = joblib.load(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/support_vector_machines/svm_market_model_sampled.joblib')
 
 # Prepare the test data
 features = [col for col in df_test.columns if col not in ['market_timestamp', 'close']]
@@ -23,19 +23,16 @@ y_test = df_test['close'].astype(np.float32)
 # Scale the features
 X_test_scaled = scaler.transform(X_test)
 
-# Predict with your SVM model
 y_pred = model.predict(X_test_scaled)
 
 # Implement the trading strategy based on SVM predictions
 cash = 10000  # Starting cash
 position = 0  # No position initially
 portfolio_values = [cash]
-# Other adjustable parameters
 investment_fraction = 0.2  # Use 20% of current cash for each new investment
 stop_loss_percentage = 0.05  # Tighten stop loss to 5%
 take_profit_percentage = 0.10  # Increase take profit to 10%
 
-# Enhance buy condition: buy only if the prediction is significantly higher than the current price
 buy_threshold = 1.02  # Buy only if the prediction is at least 2% higher than the current price
 
 for i in range(len(y_pred) - 1):
@@ -51,7 +48,8 @@ for i in range(len(y_pred) - 1):
         entry_price = current_price
     elif position > 0:
         # Check if stop loss or take profit conditions are met
-        if (current_price <= entry_price * (1 - stop_loss_percentage)) or (current_price >= entry_price * (1 + take_profit_percentage)):
+        if (current_price <= entry_price * (1 - stop_loss_percentage)) or (
+                current_price >= entry_price * (1 + take_profit_percentage)):
             cash += position * current_price
             position = 0
     portfolio_values.append(cash + (position * current_price if position > 0 else 0))
@@ -81,11 +79,10 @@ performance_text = (
     f"Total Portfolio Return (%): {total_portfolio_return:.2f}\n"
     f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
     f"Sortino Ratio: {sortino_ratio:.2f}\n"
-    f"Max Drawdown: {max_drawdown*100:.2f}%\n"
+    f"Max Drawdown: {max_drawdown * 100:.2f}%\n"
     f"MSE (Market Model): {mse_market:.2f}\n"
     f"RMSE (Market Model): {rmse_market:.2f}\n"
 )
-
 
 # Plotting
 plt.figure(figsize=(14, 7))
@@ -96,5 +93,6 @@ plt.xlabel("Time (Trading Minutes)", fontsize=14)
 plt.ylabel("Portfolio Value (USD)", fontsize=14)
 plt.legend(loc="upper left", fontsize=12)
 plt.grid(True, which='both', linestyle='--', linewidth=0.5)
-plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor": "white", "alpha": 0.5, "pad": 5}, verticalalignment='top')
+plt.figtext(0.5, 0.75, performance_text, ha="center", fontsize=10, bbox={"facecolor": "white", "alpha": 0.5, "pad": 5},
+            verticalalignment='top')
 plt.show()

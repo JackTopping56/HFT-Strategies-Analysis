@@ -30,11 +30,14 @@ df_sentiment['Actual Class'] = (df_sentiment['Actual Sentiment'] > threshold).as
 
 # Calculate metrics for sentiment model right after converting both actual and predicted to binary
 accuracy_sentiment = accuracy_score(df_sentiment['Actual Class'], df_sentiment['Predicted Class'])
-precision_sentiment, recall_sentiment, f1_score_sentiment, _ = precision_recall_fscore_support(df_sentiment['Actual Class'], df_sentiment['Predicted Class'], average='binary')
+precision_sentiment, recall_sentiment, f1_score_sentiment, _ = precision_recall_fscore_support(
+    df_sentiment['Actual Class'], df_sentiment['Predicted Class'], average='binary')
 
 # Load market model and scaler from joblib files
-scaler = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/scaler_market.joblib')
-market_model = joblib.load('/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/model_market.joblib')
+scaler = joblib.load(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/scaler_market.joblib')
+market_model = joblib.load(
+    '/Users/jacktopping/Documents/HFT-Analysis/src/models/market_models/random_forest/model_market.joblib')
 
 # Feature selection and scaling for market data
 features = [col for col in df_market_test.columns if col not in ['market_timestamp', 'close']]
@@ -110,7 +113,7 @@ performance_text = (
     f"Total Portfolio Return (%): {total_portfolio_return:.2f}\n"
     f"Sharpe Ratio: {sharpe_ratio:.2f}\n"
     f"Sortino Ratio: {sortino_ratio:.2f}\n"
-    f"Max Drawdown: {max_drawdown*100:.2f}%\n"
+    f"Max Drawdown: {max_drawdown * 100:.2f}%\n"
     f"MSE (Market Model): {mse_market:.2f}\n"
     f"RMSE (Market Model): {rmse_market:.2f}\n"
     f"Accuracy (Sentiment Model): {accuracy_sentiment:.2f}\n"
