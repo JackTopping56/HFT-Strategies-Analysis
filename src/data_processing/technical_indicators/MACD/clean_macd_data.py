@@ -1,7 +1,6 @@
 from google.cloud import bigquery
 import pandas as pd
 
-
 client = bigquery.Client()
 
 QUERY = (
@@ -12,8 +11,6 @@ df = client.query(QUERY).to_dataframe()
 
 print("Data loaded successfully. Number of rows before cleaning:", len(df))
 
-# Basic cleaning steps:
-
 # 1. Remove duplicates based on the 'time' column
 df = df.drop_duplicates(subset=['time'])
 print("After removing duplicates. Number of rows:", len(df))
@@ -22,7 +19,7 @@ print("After removing duplicates. Number of rows:", len(df))
 df = df.fillna(method='ffill')
 print("After handling missing values. Number of rows:", len(df))
 
-# 3. Correct data types (if needed)
+# 3. Correct data types
 df['time'] = pd.to_datetime(df['time'])
 df['MACD'] = pd.to_numeric(df['MACD'], errors='coerce')
 df['MACD_Hist'] = pd.to_numeric(df['MACD_Hist'], errors='coerce')
@@ -45,7 +42,6 @@ df['MACD_Signal_anomaly'] = df['MACD_Signal'].abs() > (macd_signal_std * std_mul
 df = df[~(df['MACD_anomaly'] | df['MACD_Hist_anomaly'] | df['MACD_Signal_anomaly'])]
 
 destination_table_id = 'lucky-science-410310.snp500_technical_indicator_data.snp500_macd_data_clean'
-
 
 job_config = bigquery.LoadJobConfig(
     schema=[

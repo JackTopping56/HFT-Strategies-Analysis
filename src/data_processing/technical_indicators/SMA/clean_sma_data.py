@@ -1,10 +1,8 @@
 from google.cloud import bigquery
 import pandas as pd
 
-
 client = bigquery.Client()
 
-# Define your query to load the raw SMA data
 QUERY = (
     'SELECT * FROM `lucky-science-410310.snp500_technical_indicator_data.snp500_sma_data_raw`'
 )
@@ -13,8 +11,6 @@ QUERY = (
 df = client.query(QUERY).to_dataframe()
 
 print("Data loaded successfully. Number of rows before cleaning:", len(df))
-
-# Basic cleaning steps:
 
 # 1. Remove duplicates based on the 'time' column
 df = df.drop_duplicates(subset=['time'])
@@ -32,7 +28,6 @@ df['SMA_anomaly'] = df['SMA'].isna()
 df = df[~df['SMA_anomaly']]
 
 destination_table_id = 'lucky-science-410310.snp500_technical_indicator_data.snp500_sma_data_clean'
-
 
 job_config = bigquery.LoadJobConfig(
     schema=[

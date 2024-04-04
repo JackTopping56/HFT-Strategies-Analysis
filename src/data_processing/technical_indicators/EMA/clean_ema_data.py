@@ -1,9 +1,7 @@
 from google.cloud import bigquery
 import pandas as pd
 
-
 client = bigquery.Client()
-
 
 QUERY = (
     'SELECT * FROM `lucky-science-410310.snp500_technical_indicator_data.snp500_ema_data_raw`'
@@ -14,7 +12,6 @@ df = client.query(QUERY).to_dataframe()
 
 print("Data loaded successfully. Number of rows before cleaning:", len(df))
 
-# Basic cleaning steps:
 
 # 1. Remove duplicates based on the 'time' column
 df = df.drop_duplicates(subset=['time'])
@@ -33,7 +30,6 @@ if df['EMA'].isnull().any():
     print("Warning: Non-numeric data found and converted to NaN. Review the original data for errors.")
 
 destination_table_id = 'lucky-science-410310.snp500_technical_indicator_data.snp500_ema_data_clean'
-
 
 job_config = bigquery.LoadJobConfig(
     schema=[
