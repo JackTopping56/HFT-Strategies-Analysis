@@ -3,7 +3,6 @@ from google.cloud import bigquery
 from sklearn.metrics import mean_squared_error
 import joblib
 
-
 client = bigquery.Client()
 
 test_table_id = 'lucky-science-410310.final_datasets.sentiment_training_data'
