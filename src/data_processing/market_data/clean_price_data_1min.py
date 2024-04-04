@@ -8,7 +8,7 @@ QUERY = (
     'SELECT * FROM `lucky-science-410310.snp500_market_data.snp500_market_data_raw`'
 )
 
-# Load the data into a pandas DataFrame
+
 df = client.query(QUERY).to_dataframe()
 
 # 1. Remove duplicates
@@ -20,7 +20,6 @@ df = df.fillna(method='ffill')
 
 
 # 3. Check for outliers and data consistency
-# Assuming price shouldn't change more than 10% between consecutive minutes & checking OHLC consistency
 def detect_outliers_and_inconsistency(row):
     if (abs(row['open'] - row['close']) / row['close'] > 0.1) or \
        (row['high'] < row['low']) or \
@@ -34,7 +33,7 @@ df['is_outlier'] = df.apply(detect_outliers_and_inconsistency, axis=1)
 df = df[df['is_outlier'] == False]
 df = df.drop(columns=['is_outlier'])
 
-# 4. Correct data types (if needed)
+# 4. Correct data types
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 df['open'] = df['open'].astype(float)
 df['high'] = df['high'].astype(float)
