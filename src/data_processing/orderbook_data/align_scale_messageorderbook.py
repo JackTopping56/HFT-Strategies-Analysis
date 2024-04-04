@@ -1,12 +1,11 @@
-# Define the number of levels (50 in this case)
+# Define the number of levels
 num_levels = 50
 
-# Define the project and dataset names
 project_name = "lucky-science-410310"
 dataset_name = "snp500_orderbook_data"
 
 # Define the scaling factor
-scaling_factor = 2.859259259259259  # Replace with your desired scaling factor
+scaling_factor = 2.859259259259259
 
 # Generate the SQL query for the 50 levels
 sql_query = f"""

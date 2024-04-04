@@ -1,7 +1,5 @@
 from google.cloud import bigquery
 
-
-# Construct a BigQuery client object.
 client = bigquery.Client()
 
 # Define query for cleaning the order book data and creating a new table

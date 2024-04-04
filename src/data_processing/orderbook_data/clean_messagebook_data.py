@@ -2,10 +2,7 @@ from google.cloud import bigquery
 from datetime import datetime
 import pytz
 
-
-# Construct a BigQuery client object.
 client = bigquery.Client()
-
 
 midnight_date = datetime(2023, 1, 3, 0, 0, tzinfo=pytz.timezone('America/New_York'))
 # Get the equivalent UTC datetime
