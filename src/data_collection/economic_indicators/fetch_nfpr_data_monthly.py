@@ -3,11 +3,9 @@ from datetime import datetime
 import pandas as pd
 from io import StringIO
 
-
 api_key = '123Q6N0D536N4R2Y'
 
 
-# Function to fetch and save Nonfarm Payroll data
 def fetch_and_save_nonfarm_payroll(api_key):
     """Fetches and saves Nonfarm Payroll data for the specified timeframe."""
     url = f'https://www.alphavantage.co/query?function=NONFARM_PAYROLL&apikey={api_key}&datatype=csv'
@@ -19,7 +17,6 @@ def fetch_and_save_nonfarm_payroll(api_key):
             # Parse the CSV data from the response using StringIO
             data = pd.read_csv(StringIO(response.text))
 
-            # Assuming 'timestamp' and 'value' are the column headers for date and nonfarm payroll count
             data['timestamp'] = pd.to_datetime(data['timestamp'])
 
             # Define the start and end date for filtering

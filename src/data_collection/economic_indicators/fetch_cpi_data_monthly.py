@@ -1,8 +1,6 @@
 import requests
 import pandas as pd
-from datetime import datetime
 from io import StringIO
-
 
 api_key = '123Q6N0D536N4R2Y'
 

@@ -3,7 +3,6 @@ from datetime import datetime
 import pandas as pd
 from io import StringIO
 
-
 api_key = '123Q6N0D536N4R2Y'
 
 
@@ -19,7 +18,6 @@ def fetch_and_save_federal_funds_rate(api_key):
             # Parse the CSV data from the response using StringIO
             data = pd.read_csv(StringIO(response.text))
 
-            # Assuming 'timestamp' and 'value' are the column headers for date and rate
             data['timestamp'] = pd.to_datetime(data['timestamp'])
 
             # Define the start and end date for filtering
