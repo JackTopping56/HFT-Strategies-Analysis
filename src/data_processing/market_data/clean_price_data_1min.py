@@ -1,13 +1,11 @@
 from google.cloud import bigquery
 import pandas as pd
 
-
 client = bigquery.Client()
 
 QUERY = (
     'SELECT * FROM `lucky-science-410310.snp500_market_data.snp500_market_data_raw`'
 )
-
 
 df = client.query(QUERY).to_dataframe()
 
@@ -22,9 +20,9 @@ df = df.fillna(method='ffill')
 # 3. Check for outliers and data consistency
 def detect_outliers_and_inconsistency(row):
     if (abs(row['open'] - row['close']) / row['close'] > 0.1) or \
-       (row['high'] < row['low']) or \
-       (not row['low'] <= row['open'] <= row['high']) or \
-       (not row['low'] <= row['close'] <= row['high']):
+            (row['high'] < row['low']) or \
+            (not row['low'] <= row['open'] <= row['high']) or \
+            (not row['low'] <= row['close'] <= row['high']):
         return True
     return False
 
