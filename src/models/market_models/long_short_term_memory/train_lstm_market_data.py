@@ -8,7 +8,6 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping
 
-
 client = bigquery.Client()
 
 # Load the training data from BigQuery
@@ -16,7 +15,7 @@ table_id_train = 'lucky-science-410310.final_datasets.market_training_data'
 query_train = f"SELECT * FROM `{table_id_train}`"
 df_train = client.query(query_train).to_dataframe()
 
-# Sample a smaller subset for initial experiments
+# Sample a smaller subset
 df_train_sampled = df_train.sample(frac=0.1, random_state=42)
 
 # Select numeric features and target variable
@@ -37,7 +36,8 @@ X_train_sampled = np.reshape(X_train_sampled, (X_train_sampled.shape[0], 1, X_tr
 
 # Normalize features
 scaler = MinMaxScaler(feature_range=(0, 1))
-X_train_scaled_sampled = scaler.fit_transform(X_train_sampled.reshape(-1, X_train_sampled.shape[2])).reshape(X_train_sampled.shape)
+X_train_scaled_sampled = scaler.fit_transform(X_train_sampled.reshape(-1, X_train_sampled.shape[2])).reshape(
+    X_train_sampled.shape)
 joblib.dump(scaler, 'scaler_market_lstm.joblib')  # Save the scaler
 
 # Define LSTM model

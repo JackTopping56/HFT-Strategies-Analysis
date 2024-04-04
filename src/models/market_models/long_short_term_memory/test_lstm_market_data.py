@@ -4,7 +4,6 @@ from google.cloud import bigquery
 import joblib
 from tensorflow.keras.models import load_model
 
-
 client = bigquery.Client()
 
 table_id_test = 'lucky-science-410310.final_datasets.market_test_data'
