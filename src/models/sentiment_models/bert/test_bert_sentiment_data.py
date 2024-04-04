@@ -36,12 +36,11 @@ X_test = {
 }
 y_test = df_test['SentimentScore'].values
 
-
 # Make predictions
 y_pred = model.predict(X_test)[0].flatten()
 
 # Evaluate the model with mean squared error for regression
-mse = np.mean((y_pred - y_test)**2)
+mse = np.mean((y_pred - y_test) ** 2)
 print(f"Mean Squared Error: {mse}")
 
 # Save predictions

@@ -6,7 +6,6 @@ from transformers import InputExample, InputFeatures
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
-
 client = bigquery.Client()
 
 # Load the training data from BigQuery
@@ -24,11 +23,11 @@ tokenizer = BertTokenizer.from_pretrained(model_name)
 
 # Function to convert DataFrame rows to InputExample objects
 def convert_data_to_examples(train):
-  train_InputExamples = train.apply(lambda x: InputExample(guid=None,
-                                                           text_a = x['ProcessedArticleTitle'],
-                                                           text_b = None,
-                                                           label = x['SentimentScore']), axis = 1)
-  return train_InputExamples
+    train_InputExamples = train.apply(lambda x: InputExample(guid=None,
+                                                             text_a=x['ProcessedArticleTitle'],
+                                                             text_b=None,
+                                                             label=x['SentimentScore']), axis=1)
+    return train_InputExamples
 
 
 # Function to convert InputExamples to the required format for BERT
@@ -47,7 +46,7 @@ def convert_examples_to_tf_dataset(examples, tokenizer, max_length=128):
         )
 
         input_ids, token_type_ids, attention_mask = (input_dict["input_ids"],
-            input_dict["token_type_ids"], input_dict['attention_mask'])
+                                                     input_dict["token_type_ids"], input_dict['attention_mask'])
 
         features.append(
             InputFeatures(
