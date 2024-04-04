@@ -42,7 +42,7 @@ for i in range(len(y_pred) - 1):
         position = 0
     portfolio_values.append(cash + position * y_test[i] if position > 0 else cash)
 
-risk_free_rate = 0.02 / 252  # Assuming 252 trading days in a year for daily rate conversion
+risk_free_rate = 0.02 / 252
 
 # Calculate and print metrics
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
