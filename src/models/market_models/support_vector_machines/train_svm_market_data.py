@@ -38,8 +38,8 @@ model = SVR()
 
 param_grid = {
     'C': [1, 10],  # Regularization parameter
-    'gamma': ['scale'],  # Kernel coefficient, start with 'scale'
-    'kernel': ['rbf']  # Kernel type, starting with RBF kernel
+    'gamma': ['scale'],
+    'kernel': ['rbf']
 }
 
 # Grid search with cross-validation on the sampled data
