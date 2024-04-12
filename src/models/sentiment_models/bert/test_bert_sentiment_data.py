@@ -23,7 +23,7 @@ model = TFBertForSequenceClassification.from_pretrained(BERT_MODEL_PATH, num_lab
 # Encode the input data
 inputs = tokenizer.batch_encode_plus(
     df_test['ProcessedArticleTitle'].tolist(),
-    max_length=128,  # The same as during training
+    max_length=128,
     padding='max_length',
     truncation=True,
     return_tensors='np'
