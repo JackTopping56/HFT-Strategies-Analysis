@@ -10,7 +10,6 @@ from tensorflow.keras.callbacks import EarlyStopping
 import joblib
 import tensorflow as tf
 
-# Google Cloud credentials and BigQuery client setup
 
 client = bigquery.Client()
 
@@ -32,7 +31,7 @@ model = Sequential([
     Embedding(input_dim=5000, output_dim=64, input_length=max_length),
     LSTM(64, return_sequences=True),
     LSTM(32),
-    Dense(1, activation='linear')  # No activation for regression task
+    Dense(1, activation='linear')
 ])
 
 # Compile the model
