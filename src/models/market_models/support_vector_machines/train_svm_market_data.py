@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from google.cloud import bigquery
-from sklearn.svm import SVR  # Support Vector Regressor for regression tasks
+from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
