@@ -54,7 +54,7 @@ sortino_ratio = (portfolio_returns.mean() * 252 - risk_free_rate) / (
 rolling_max = pd.Series(portfolio_values).cummax()
 daily_drawdown = pd.Series(portfolio_values) / rolling_max - 1
 max_drawdown = daily_drawdown.min()
-annual_return = portfolio_returns.mean() * 252  # Assuming 252 trading days
+annual_return = portfolio_returns.mean() * 252
 calmar_ratio = annual_return / abs(max_drawdown)
 
 y_pred = y_pred.flatten()
