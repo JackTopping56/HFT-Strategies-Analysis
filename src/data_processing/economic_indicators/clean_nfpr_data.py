@@ -29,7 +29,7 @@ job_config = bigquery.LoadJobConfig(
         bigquery.SchemaField("timestamp", "DATE"),
         bigquery.SchemaField("value", "INTEGER"),
     ],
-    write_disposition="WRITE_TRUNCATE",  # Overwrites the table if it already exists
+    write_disposition="WRITE_TRUNCATE",
 )
 
 # Upload the DataFrame to BigQuery

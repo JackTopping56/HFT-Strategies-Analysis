@@ -7,7 +7,6 @@ api_key = '123Q6N0D536N4R2Y'
 
 
 def fetch_and_save_macd(year, month):
-    """Fetches and saves MACD data for the specified year and month."""
     try:
         url = f'https://www.alphavantage.co/query?function=MACD&symbol=SPY&interval=1min&series_type=close&fastperiod=12&slowperiod=26&signalperiod=9&month={year}-{month:02d}&apikey={api_key}&datatype=csv'
         response = requests.get(url)

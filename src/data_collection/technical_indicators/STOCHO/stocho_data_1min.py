@@ -7,7 +7,6 @@ api_key = '123Q6N0D536N4R2Y'
 
 
 def fetch_and_save_stoch(year, month):
-    """Fetches and saves STOCH data for the specified year and month."""
     try:
         url = f'https://www.alphavantage.co/query?function=STOCH&symbol=SPY&interval=1min&fastkperiod=5&slowkperiod=3&slowdperiod=3&slowkmatype=0&slowdmatype=0&month={year}-{month:02d}&apikey={api_key}&datatype=csv'
         response = requests.get(url)
