@@ -33,7 +33,7 @@ job_config = bigquery.LoadJobConfig(
         bigquery.SchemaField("time", "TIMESTAMP"),
         bigquery.SchemaField("VWAP", "FLOAT"),
     ],
-    write_disposition="WRITE_TRUNCATE",  # Overwrites the table if it already exists
+    write_disposition="WRITE_TRUNCATE",
 )
 
 job = client.load_table_from_dataframe(df, destination_table_id, job_config=job_config)

@@ -36,7 +36,7 @@ job_config = bigquery.LoadJobConfig(
         bigquery.SchemaField("time", "TIMESTAMP"),
         bigquery.SchemaField("EMA", "FLOAT"),
     ],
-    write_disposition="WRITE_TRUNCATE",  # Overwrites the table if it already exists
+    write_disposition="WRITE_TRUNCATE",
 )
 
 # Upload the DataFrame to BigQuery

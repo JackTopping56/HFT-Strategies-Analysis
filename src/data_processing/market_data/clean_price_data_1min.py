@@ -51,7 +51,7 @@ job_config = bigquery.LoadJobConfig(
         bigquery.SchemaField("close", "FLOAT"),
         bigquery.SchemaField("volume", "FLOAT"),
     ],
-    write_disposition="WRITE_TRUNCATE",  # Overwrites the table if it already exists
+    write_disposition="WRITE_TRUNCATE",
 )
 
 # Define the destination table

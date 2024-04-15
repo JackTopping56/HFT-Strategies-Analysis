@@ -72,7 +72,7 @@ job_config = bigquery.LoadJobConfig(
         bigquery.SchemaField("ProcessedArticleTitle", "STRING", mode="NULLABLE"),
         bigquery.SchemaField("ArticleDate", "DATE", mode="REQUIRED"),
     ],
-    write_disposition="WRITE_TRUNCATE",  # Overwrites the table.
+    write_disposition="WRITE_TRUNCATE",
 )
 
 job = client.load_table_from_dataframe(

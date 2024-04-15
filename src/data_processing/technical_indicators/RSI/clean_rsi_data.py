@@ -32,10 +32,9 @@ job_config = bigquery.LoadJobConfig(
     schema=[
         bigquery.SchemaField("time", "TIMESTAMP"),
         bigquery.SchemaField("RSI", "FLOAT"),
-        # Include the anomaly flag column if you want to keep it for review
         bigquery.SchemaField("RSI_anomaly", "BOOLEAN"),
     ],
-    write_disposition="WRITE_TRUNCATE",  # Overwrites the table if it already exists
+    write_disposition="WRITE_TRUNCATE",
 )
 
 job = client.load_table_from_dataframe(df, destination_table_id, job_config=job_config)
