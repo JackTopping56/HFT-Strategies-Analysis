@@ -65,7 +65,7 @@ for i in range(len(y_pred) - 1):
 
 # Calculate returns and metrics
 portfolio_returns = pd.Series(portfolio_values).pct_change().fillna(0)
-risk_free_rate = 0.02 / 252  # Assuming 252 trading days in a year
+risk_free_rate = 0.02 / 252
 sharpe_ratio = (portfolio_returns.mean() * 252 - risk_free_rate) / (portfolio_returns.std() * np.sqrt(252))
 negative_returns = portfolio_returns[portfolio_returns < 0]
 sortino_ratio = (portfolio_returns.mean() * 252 - risk_free_rate) / (negative_returns.std() * np.sqrt(252))
