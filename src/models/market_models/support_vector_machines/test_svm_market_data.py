@@ -15,11 +15,11 @@ df_test = client.query(query_test).to_dataframe()
 
 # Load the scaler and the trained SVM model
 scaler = joblib.load('scaler_market_svm.joblib')
-model = joblib.load('svm_market_model_sampled.joblib')  # Updated to the correct model file
+model = joblib.load('svm_market_model_sampled.joblib')
 
 # Prepare the test dataset
 numeric_features = df_test.select_dtypes(include=[np.number]).columns.tolist()
-target_variable = 'close'  # Ensure 'close' is the target variable
+target_variable = 'close'
 features = [col for col in numeric_features if col != target_variable]
 X_test = df_test[features].astype(np.float32)
 y_test = df_test[target_variable].astype(np.float32)
@@ -47,5 +47,5 @@ plt.show()
 
 # Save predictions to CSV
 predictions_df = pd.DataFrame({'Actual Close': y_test, 'Predicted Close': y_pred})
-predictions_df.to_csv('market_svm_predictions_sampled.csv', index=False)  # Updated filename to reflect sampled data
+predictions_df.to_csv('market_svm_predictions_sampled.csv', index=False)
 print("Predictions saved to 'market_svm_predictions_sampled.csv'.")

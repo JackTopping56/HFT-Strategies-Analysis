@@ -31,7 +31,7 @@ df_train_sampled[target_variable] = df_train_sampled[target_variable].astype(np.
 X_train_sampled = df_train_sampled[features].values
 y_train_sampled = df_train_sampled[target_variable].values
 
-# Reshape input to be [samples, time steps, features] which is required for LSTM
+# Reshape input to be [samples, time steps, features]
 X_train_sampled = np.reshape(X_train_sampled, (X_train_sampled.shape[0], 1, X_train_sampled.shape[1]))
 
 # Normalize features

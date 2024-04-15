@@ -20,7 +20,7 @@ model = load_model('lstm_sentiment_model.h5')
 
 # Prepare the text data
 sequences_test = tokenizer.texts_to_sequences(df_test['ProcessedArticleTitle'])
-X_test = pad_sequences(sequences_test, maxlen=max_length, padding='post')  # Use the same max_length as in training
+X_test = pad_sequences(sequences_test, maxlen=max_length, padding='post')
 y_test = df_test['SentimentScore'].values
 
 # Make predictions

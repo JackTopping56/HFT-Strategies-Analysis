@@ -39,7 +39,7 @@ joblib.dump(scaler, 'scaler_market.joblib')  # Save the scaler
 model = RandomForestRegressor(random_state=42, n_jobs=-1)
 param_distributions = {
     'n_estimators': [100, 200, 300],
-    'max_depth': [None, 10, 20, 30],  # Added more options
+    'max_depth': [None, 10, 20, 30],
     'min_samples_split': [2, 5, 10],
     'min_samples_leaf': [1, 2, 4],
     'max_features': [1.0, 'sqrt', 'log2']
